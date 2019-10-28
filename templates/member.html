@@ -19,14 +19,16 @@
                             <th>表示名</th>
                             <th>性別</th>
                             <th>状態</th>
+                            <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for member in members %}
                         <tr>
                                 <th>{{  member.year }}</th>
-                                <th>{{ member.family_name }} ({{ member.kana }})</th>
-                                <th>{{ member.first_name }} ({{ member.first_kana }})</th>
+                                <th>{{ member.family_name }}{{"(" + member.family_kana  + ")"  if member.family_kana  }}</th>
+                                <th>{{ member.first_name }}{{"(" + member.first_kana  + ")"  if member.first_kana  }}</th>
                                 <th>{{ member.show_name }}</th>
                                 <th>
                                     {% if member.sex == 0 %}
@@ -42,6 +44,20 @@
                                             非表示
                                     {% endif %}
                                 </th>
+                                <th>
+                                    <form method="get" action="{{url_for('member_edit')}}">
+                                        <input type="hidden" name="_method" value="PUT">
+                                        <input type="hidden" name="member_id" value="{{member.member_id}}">
+                                        <input type="submit" value="編集"  class="btn btn-warning">
+                                    </form>
+                            </th>
+                                <th>
+                                    <form method="post" action="{{url_for('member_confirm')}}">
+                                            <input type="hidden" name="_method" value="DELETE">
+                                            <input type="hidden" name="member_id" value="{{member.member_id}}">
+                                            <input type="submit" value="削除"  class="btn btn-danger">
+                                    </form>
+                                </th>    
                         </tr>
                         {% endfor %}                        
                     </tbody>

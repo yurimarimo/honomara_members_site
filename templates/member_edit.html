@@ -3,7 +3,91 @@
 <div class="container">
 メンバー登録ページ
 
-{% import "bootstrap/wtf.html" as wtf %}
-{{ wtf.quick_form(form) }}
+
+<form action="" class="form" method="post" role="form">
+    
+        <input id="member_id" name="member_id" type="hidden" value="{{form.member_id.data if form.member_id.data}}">
+        <input id="_method" name="_method" type="hidden" value="{{method}}">
+{{ form.csrf_token }}
+<div class="form-group">
+    <label for="year" class="col-lg-2 control-label">入学年度：</label>
+    <div class="col-lg-10">
+        <input type="text" id="year" name="year" class="form-control" required
+            value="{{form.year.data if form.year.data}}" placeholder="入学年度">
+    </div>
+</div>
+<div class="form-group">
+    <label for="family_name" class="col-lg-2 control-label">姓：</label>
+    <div class="col-lg-10">
+        <input type="text" id="family_name" name="family_name" class="form-control" required
+            value="{{form.family_name.data if form.family_name.data}}" placeholder="姓">
+    </div>
+</div>
+<div class="form-group">
+    <label for="family_kana" class="col-lg-2 control-label">カナ（姓）：</label>
+    <div class="col-lg-10">
+        <input type="text" id="family_kana" name="family_kana" class="form-control" required
+            value="{{form.family_kana.data if form.family_kana.data}}" placeholder="カナ（姓）">
+    </div>
+</div>
+<div class="form-group">
+    <label for="first_name" class="col-lg-2 control-label">名：</label>
+    <div class="col-lg-10">
+        <input type="text" id="first_name" name="first_name" class="form-control" required
+            value="{{form.first_name.data if form.first_name.data}}" placeholder="名">
+    </div>
+</div>
+<div class="form-group">
+    <label for="first_kana" class="col-lg-2 control-label">カナ（名）：</label>
+    <div class="col-lg-10">
+        <input type="text" id="first_kana" name="first_kana" class="form-control" required
+            value="{{form.first_kana.data if form.first_kana.data}}" placeholder="カナ（名）">
+    </div>
+</div>
+<div class="form-group">
+    <label for="show_name" class="col-lg-2 control-label">表示名：</label>
+    <div class="col-lg-10">
+        <input type="text" id="show_name" name="show_name" class="form-control" required
+            value="{{form.show_name.data if form.show_name.data}}" placeholder="表示名">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-lg-2 control-label">姓</label>
+    <div class="col-lg-10">
+        <div class="radio">
+            <label>
+                <input type="radio" name="sex" id="sex-0" value="0" {{"checked" if form.visible.data != 0}}>
+                男 </label>
+        </div>
+        <div class="radio">
+            <label>
+                <input type="radio" name="sex" id="sex-1" value="1" {{"checked" if form.visible.data == 0}}>
+                女 </label>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="form-group">
+    <label class="col-lg-2 control-label">状態</label>
+    <div class="col-lg-10">
+        <div class="radio">
+            <label><input type="radio" name="visible" id="visible-0" value="True"
+                    {{ "checked" if (form.visible.data != False) }}>表示</label>
+        </div>
+        <div class="radio">
+            <label><input type="radio" name="visible" id="visible-1" value="False"
+                    {{ "checked" if (form.visible.data == False) }}>非表示</label>
+        </div>
+    </div>
+</div>
+
+
+<input class="btn btn-default" id="submit" name="submit" type="submit" value="確定">
+
+
+</form>
 </div>
 {% endblock %}
