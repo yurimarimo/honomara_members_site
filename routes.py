@@ -33,11 +33,13 @@ def logout():
 
 
 @app.route('/manage')
+@login_required
 def manage():
     return render_template('manage.html')
 
 
 @app.route('/member')
+@login_required
 def member():
     members = Member.query.order_by(Member.year.desc())
     return render_template('member.html', members=members)
