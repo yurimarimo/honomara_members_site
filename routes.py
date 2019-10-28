@@ -2,7 +2,7 @@ from flask import render_template, request, abort, redirect, url_for, flash
 from flask_bootstrap import Bootstrap
 from honomara_members_site import app
 from honomara_members_site.login import user_check, users
-from honomara_members_site.model import db, Member
+from honomara_members_site.model import db, Member, Training, After
 from flask_login import login_required, login_user, logout_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, RadioField, IntegerField, HiddenField
@@ -135,3 +135,21 @@ def member_confirm():
             method = 'POST'
 
     return render_template('member_confirm.html', form=form, method=method)
+
+
+@app.route('/training/')
+def training():
+    per_page = 20
+    page = request.args.get('page') or 1
+    page = max([1, int(page)])
+    trainings = Training.query.order_by(Training.date.desc()).paginate(page, per_page)
+    return render_template('training.html', pagination=trainings)
+
+
+@app.route('/after/')
+def after():
+    per_page = 40
+    page = request.args.get('page') or 1
+    page = max([1, int(page)])
+    afters = After.query.order_by(After.date.desc()).paginate(page, per_page)
+    return render_template('after.html', pagination=afters)
