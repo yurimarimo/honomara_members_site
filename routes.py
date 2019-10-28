@@ -12,6 +12,11 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/manage')
+def manage():
+    return render_template('manage.html')
+
+
 @app.route('/login/', methods=["GET", "POST"])
 def login():
     if(request.method == "POST"):
