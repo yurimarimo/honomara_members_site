@@ -2,6 +2,7 @@ from flask import render_template, request, abort, redirect, url_for
 from flask_bootstrap import Bootstrap
 from honomara_members_site import app
 from honomara_members_site.login import user_check, users
+from honomara_members_site.model import Member
 from flask_login import login_required, login_user, logout_user
 
 bootstrap = Bootstrap(app)
@@ -10,11 +11,6 @@ bootstrap = Bootstrap(app)
 @app.route('/')
 def index():
     return render_template('index.html')
-
-
-@app.route('/manage')
-def manage():
-    return render_template('manage.html')
 
 
 @app.route('/login/', methods=["GET", "POST"])
@@ -34,3 +30,14 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+
+@app.route('/manage')
+def manage():
+    return render_template('manage.html')
+
+
+@app.route('/member')
+def member():
+    members = Member.query.order_by(Member.year.desc())
+    return render_template('member.html', members=members)
