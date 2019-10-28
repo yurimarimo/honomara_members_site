@@ -1,0 +1,66 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}ホノマラメンバーズページ{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet"
+      href="{{url_for('.static', filename='css/bootstrap.min.css')}}">
+<style type="text/css">
+body { padding-top: 80px; }
+@media ( min-width: 768px ) {
+    #banner {
+        min-height: 300px;
+        border-bottom: none;
+    }
+    .bs-docs-section {
+        margin-top: 8em;
+    }
+    .bs-component {
+        position: relative;
+    }
+    .bs-component .modal {
+        position: relative;
+        top: auto;
+        right: auto;
+        left: auto;
+        bottom: auto;
+        z-index: 1;
+        display: block;
+    }
+    .bs-component .modal-dialog {
+        width: 90%;
+    }
+    .bs-component .popover {
+        position: relative;
+        display: inline-block;
+        width: 220px;
+        margin: 20px;
+    }
+    .nav-tabs {
+        margin-bottom: 15px;
+    }
+    .progress {
+        margin-bottom: 10px;
+    }
+}
+</style>
+{% endblock %}
+{% include 'header.html' %}
+{% block content %}
+<div class="container">
+
+</div>
+{% endblock %}
+{% include 'footer.html' %}
+
+{% block scripts %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="{{url_for('.static', filename='js/bootstrap.min.js')}}"></script>
+
+<script type="text/javascript">
+	$('.bs-component [data-toggle="popover"]').popover();
+	$('.bs-component [data-toggle="tooltip"]').tooltip();
+</script>
+
+{% endblock %}
