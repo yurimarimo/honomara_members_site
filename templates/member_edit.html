@@ -1,0 +1,9 @@
+{% extends "template.html" %}
+{% block content %}
+<div class="container">
+メンバー登録ページ
+
+{% import "bootstrap/wtf.html" as wtf %}
+{{ wtf.quick_form(form) }}
+</div>
+{% endblock %}
