@@ -5,8 +5,9 @@ from honomara_members_site.login import user_check, users
 from honomara_members_site.model import db, Member, Training, After
 from flask_login import login_required, login_user, logout_user
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, RadioField, IntegerField, HiddenField
-from wtforms.validators import Required, Optional
+from wtforms import StringField, SubmitField, RadioField, IntegerField
+from wtforms import HiddenField, TextAreaField, DateField, SelectMultipleField, SelectField
+from wtforms.validators import Optional, InputRequired
 
 
 bootstrap = Bootstrap(app)
@@ -51,90 +52,70 @@ def member():
 
 class MemberForm(FlaskForm):
     member_id = HiddenField(validators=[Optional()])
-    year = IntegerField('入学年度:', validators=[Required()])
-    family_name = StringField('姓:', validators=[Required()])
-    family_kana = StringField('カナ(姓):', validators=[Required()])
-    first_name = StringField('名:', validators=[Required()])
-    first_kana = StringField('カナ(名):', validators=[Required()])
-    show_name = StringField('表示名:', validators=[Required()])
-    sex = RadioField('性別:', default=0, coerce=int, choices=[(0, '男'), (1, '女')])
-    visible = RadioField('状態:', coerce=bool, choices=[(True, '表示'), (False, '非表示')])
-    _method = HiddenField(validators=[Optional()])
+    year = IntegerField('入学年度:', validators=[InputRequired()])
+    family_name = StringField('姓:', validators=[InputRequired()])
+    family_kana = StringField('カナ(姓):', validators=[InputRequired()])
+    first_name = StringField('名:', validators=[InputRequired()])
+    first_kana = StringField('カナ(名):', validators=[InputRequired()])
+    show_name = StringField('表示名:', validators=[InputRequired()])
+    sex = RadioField('性別:', default=0, coerce=int,
+                     choices=[(0, '男'), (1, '女')])
+    visible = RadioField('状態:', coerce=bool, choices=[
+                         (True, '表示'), (False, '非表示')],
+                         validators=[InputRequired()])
+    method = HiddenField(validators=[Optional()])
+    confirmed = HiddenField(validators=[Optional()])
     submit = SubmitField('確定')
 
 
 @app.route('/member/edit', methods=['GET', 'POST'])
 @login_required
 def member_edit():
-    form = MemberForm()
-    form.visible.data = request.form.get('visible') == 'True'
+    form = MemberForm(formdata=request.form)
+    form.visible.data = request.form.get('visible') != 'False'
 
     if form.validate_on_submit():
         return redirect(url_for('member_confirm'), code=307)
 
-    if request.args.get('_method') == 'PUT':
-        app.logger.info('!!!!!!!!!!!!UPDATE!!!!!!!!!!!!!!')
+    if request.args.get('method') == 'PUT':
         member_id = int(request.args.get('member_id'))
         member = Member.query.get(member_id)
-        app.logger.info(member)
         form = MemberForm(obj=member)
-        form.member_id.data = member_id
-        app.logger.info(form)
-        method = 'PUT'
+        form.method.data = 'PUT'
     else:
-        method = 'POST'
-        app.logger.info('!!!!!!!!!!!!CREATE!!!!!!!!!!!!!!')
-
-    return render_template('member_edit.html', form=form, method=method)
+        form.method.data = 'POST'
+    return render_template('member_edit.html', form=form)
 
 
-@app.route('/member/confirm', methods=['POST', 'PUT', 'DELETE'])
+@app.route('/member/confirm', methods=['POST'])
 @login_required
 def member_confirm():
-    form = MemberForm()
-    app.logger.info(request)
-    app.logger.info(request.form)
-    form.visible.data = request.form.get('visible') == 'True'
+    form = MemberForm(formdata=request.form)
+    form.visible.data = request.form.get('visible') != 'False'
 
     if request.form.get('submit') == 'キャンセル':
         return redirect(url_for('user'))
 
-    if request.form.get('confirmed'):
-        app.logger.info(request.form)
-        if request.form.get('_method') == 'DELETE':
+    if form.validate_on_submit() and request.form.get('confirmed'):
+        if request.form.get('method') == 'DELETE':
             member = Member.query.get(form.member_id.data)
             db.session.delete(member)
-            flash('member has been deleted!', 'success')
-            db.session.commit()
-
-        elif request.form.get('_method') == 'PUT':
+        elif request.form.get('method') == 'PUT':
             member = Member.query.get(form.member_id.data)
             form.populate_obj(member)
-            db.session.commit()
-        else:# POST
+        elif request.form.get('method') == 'POST':
             member = Member()
             form.populate_obj(member)
             member.member_id = None
-            if member.kana is None:
-                member.kana = member.family_kana + member.first_kana
+            member.kana = member.family_kana + member.first_kana
             db.session.add(member)
-            flash('new member has been created!', 'success')
-            db.session.commit()
+        db.session.commit()
         return redirect(url_for('member'))
     else:
-        if request.form.get('_method') == 'DELETE':
-            app.logger.info(form.member_id)
+        if request.form.get('method') == 'DELETE':
             member = Member.query.get(form.member_id.data)
-            app.logger.info(member)
             form = MemberForm(obj=member)
-            app.logger.info(form)
-            method = 'DELETE'
-        elif request.form.get('_method') == 'PUT':
-            method = 'PUT'
-        else:
-            method = 'POST'
-
-    return render_template('member_confirm.html', form=form, method=method)
+        return render_template('member_confirm.html', form=form)
 
 
 @app.route('/training/')

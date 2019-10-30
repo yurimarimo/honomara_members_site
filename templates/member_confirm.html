@@ -5,11 +5,11 @@
 <div class="row">
     <div class="bs-component">
         <div class="panel panel-default">
-            {% if method == 'POST' %}
+            {% if form.method.data == 'POST' %}
                 <div class="panel-heading">以下のメンバーを新規に登録します。</div>
-            {% elif method == 'PUT' %}
+            {% elif form.method.data == 'PUT' %}
             <div class="panel-heading">以下の様にメンバー情報を更新します。</div>
-            {% elif method == 'DELETE' %}
+            {% elif form.method.data == 'DELETE' %}
                 <div class="panel-heading">以下のメンバー情報を削除します。</div>
             {% endif %}
 
@@ -49,13 +49,15 @@
                                     </tr>
                                 </tbody>
                             </table>
-                        </div>
-            
+                    </div>
             </div>
         </div>
     </div>
 </div>
 <form id="form-id" action="{{url_for('member_confirm')}}" method="post">
+        {{ form.csrf_token }}
+        {{ form.member_id }}
+        {{ form.method }}
         <input type="hidden" name="year" value="{{ form.year.data }}">
         <input type="hidden" name="family_name" value="{{ form.family_name.data }}">
         <input type="hidden" name="family_kana" value="{{ form.family_kana.data }}">
@@ -65,16 +67,16 @@
         <input type="hidden" name="sex" value="{{ form.sex.data }}">
         <input type="hidden" name="visible" value="{{ form.visible.data }}">
         <input type="hidden" name="confirmed" value="True">
-        {% if method == 'POST' %}
-            <input type="hidden" name="_method" value="POST">
+        {% if form.method.data == 'POST' %}
+            <input type="hidden" name="method" value="POST">
             <input type="submit" value="登録"  class="btn btn-primary">
-        {% elif method == 'PUT' %}
+        {% elif form.method.data == 'PUT' %}
             <input type="hidden" name="member_id" value="{{ form.member_id.data }}">
-            <input type="hidden" name="_method" value="PUT">
+            <input type="hidden" name="method" value="PUT">
             <input type="submit" value="更新"  class="btn btn-warning">
-        {% elif method == 'DELETE' %}
+        {% elif form.method.data == 'DELETE' %}
             <input type="hidden" name="member_id" value="{{ form.member_id.data }}">
-            <input type="hidden" name="_method" value="DELETE">
+            <input type="hidden" name="method" value="DELETE">
             <input type="submit" value="削除"  class="btn btn-danger">
         {% endif %}
         <a href="{{url_for('member')}}" class="btn btn-default">キャンセル</a>
