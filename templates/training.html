@@ -1,6 +1,12 @@
 {% extends "template.html" %}
 {% block content %}
 <div class="container">
+    {% if current_user.is_authenticated %}
+        <div class="row">
+                <a href="{{url_for('training_edit')}}" class="btn btn-primary btn-lg">新規練習録登録</a>
+        </div>
+    {% endif %} 
+
     <div class="row">
         <div class="col-lg-12">
             <div class="page-header">
@@ -23,6 +29,11 @@
                             <th>タイトル</th>
                             <th>参加人数</th>
                             <th>コメント</th>
+                            {% if current_user.is_authenticated %}
+                            <th></th>
+                            <th></th>
+                            {% endif %}
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -32,6 +43,22 @@
                                 <th>{{ training.title }}</th>
                                 <th>{{ len(training.participants) }}</th>
                                 <th>{{ training.comment[:15] }}...</th>
+
+                                {% if current_user.is_authenticated %}
+                                <th>
+                                        <form method="get" action="{{url_for('training_edit')}}">
+                                            <input type="hidden" name="method" value="PUT">
+                                            <input type="hidden" name="training_id" value="{{training.training_id}}">
+                                            <input type="submit" value="編集"  class="btn btn-warning">
+                                        </form>
+                                </th><th>
+                                        <form method="post" action="{{url_for('training_confirm')}}">
+                                                <input type="hidden" name="method" value="DELETE">
+                                                <input type="hidden" name="training_id" value="{{training.training_id}}">
+                                                <input type="submit" value="削除"  class="btn btn-danger">
+                                        </form>
+                                </th>
+                                {% endif %}    
                         </tr>
                         {% endfor %}                        
                     </tbody>

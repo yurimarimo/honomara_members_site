@@ -1,0 +1,16 @@
+{% extends "template.html" %}
+{% block content %}
+<div class="container">
+練習録登録ページ
+<form action="{{url_for('training_edit')}}" class="form" method="post" role="form">
+        {{ form.hidden_tag() }}
+        <div class="form-group  required">{{ form.date.label(class="control-label") }} {{form.date(class="form-control")}}</div>      
+        <div class="form-group  required">{{ form.weather.label(class="control-label") }} {{form.weather(class="form-control")}}</div>      
+        <div class="form-group  required">{{ form.place.label(class="control-label") }} {{form.place(class="form-control")}}</div>      
+        <div class="form-group  required">{{ form.participants.label(class="control-label") }} {{form.participants(class="form-control")}}</div>             
+        <div class="form-group  required">{{ form.title.label(class="control-label") }} {{form.title(class="form-control")}}</div>      
+        <div class="form-group  required">{{ form.comment.label(class="control-label") }} {{form.comment(class="form-control")}}</div>      
+        <input class="btn btn-default" id="submit" name="submit" type="submit" value="確定">
+</form>
+</div>
+{% endblock %}

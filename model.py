@@ -55,7 +55,6 @@ class Training(db.Model):
 
     training_id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date, nullable=False)
-    wday = db.Column(db.String(1))
     place = db.Column(db.String(20), nullable=False)
     weather = db.Column(db.String(20), nullable=False)
     title = db.Column(db.String(20), nullable=False)
@@ -105,7 +104,6 @@ class After(db.Model):
     date = db.Column(db.Date, nullable=False)
     after_stage = db.Column(db.Integer, nullable=False, server_default=db.text('1'))
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.restaurant_id'), nullable=False)
-    total = db.Column(db.Integer)
     title = db.Column(db.String(128), nullable=False)
     comment = db.Column(db.Text)
     restaurant = db.relationship('Restaurant')
