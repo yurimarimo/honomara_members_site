@@ -2,7 +2,7 @@ from flask import render_template, request, abort, redirect, url_for, flash
 from flask_bootstrap import Bootstrap
 from honomara_members_site import app
 from honomara_members_site.login import user_check, users
-from honomara_members_site.model import db, Member, Training, After, Restaurant
+from honomara_members_site.model import db, Member, Training, After, Restaurant, Race
 from flask_login import login_required, login_user, logout_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, RadioField, IntegerField
@@ -295,3 +295,12 @@ def after_confirm():
             form.participants.data = after.participants
             form.restaurant.data = after.restaurant
         return render_template('after_confirm.html', form=form)
+
+
+@app.route('/result/')
+def result():
+    per_page = 40
+    page = request.args.get('page') or 1
+    page = max([1, int(page)])
+    results = Race.query.order_by(Race.date.desc()).paginate(page, per_page)
+    return render_template('result.html', pagination=results)
