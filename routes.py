@@ -1,5 +1,5 @@
 from flask import render_template, request, abort, redirect, url_for
-from honomara_members_site import app, db
+from honomara_members_site import app, db, bcrypt
 from honomara_members_site.login import user_check, users
 from honomara_members_site.model import Member, Training, After, Restaurant, Race, RaceBase, RaceType, Result
 from honomara_members_site.form import MemberForm, TrainingForm, AfterForm, RaceBaseForm, RaceForm, ResultForm
@@ -15,7 +15,7 @@ def index():
 def login():
     if(request.method == "POST"):
         if (request.form["username"] in user_check and
-                request.form["password"] == user_check[request.form["username"]]["password"]):
+                bcrypt.check_password_hash(user_check[request.form["username"]]["password"], request.form["password"])):
             login_user(users.get(user_check[request.form["username"]]["id"]))
             return redirect(url_for('index'))
         else:

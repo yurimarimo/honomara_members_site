@@ -17,8 +17,8 @@ class User(UserMixin):
 
 
 users = {
-    1: User(1, "honomara", "honomara"),
-    2: User(2, "admin", "admin")
+    1: User(1, "honomara", b'$2b$12$BwaQvntTYqCydE4YBsXCyu2qGNYFoG3lryjSvWUb5oUzAK.5iEI4u'),
+    2: User(2, "admin", b'$2b$12$s4YcIkVodAk65E8Tdm6Tsu8aymojDadlBgIg0wx0eJakefO.SF5S2')
 }
 
 
