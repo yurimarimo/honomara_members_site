@@ -38,13 +38,13 @@
                                 <form method="get" action="{{url_for('race_edit')}}"
                                     style="display: inline-block; float: right; margin: 0 3px;">
                                     <input type="hidden" name="method" value="PUT">
-                                    <input type="hidden" name="race_id" value="{{race.race_id}}">
+                                    <input type="hidden" name="id" value="{{race.id}}">
                                     <input type="submit" value="編集" class="btn btn-warning">
                                 </form>
                                 <form method="post" action="{{url_for('race_confirm')}}"
                                     style="display: inline-block; float: right; margin: 0 3px;">
                                     <input type="hidden" name="method" value="DELETE">
-                                    <input type="hidden" name="race_id" value="{{race.race_id}}">
+                                    <input type="hidden" name="id" value="{{race.id}}">
                                     <input type="submit" value="削除" class="btn btn-danger">
                                 </form>
                                 {% endif %}

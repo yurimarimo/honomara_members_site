@@ -56,7 +56,7 @@
 </div>
 <form id="form-id" action="{{url_for('member_confirm')}}" method="post">
         {{ form.csrf_token }}
-        {{ form.member_id }}
+        {{ form.id }}
         {{ form.method }}
         <input type="hidden" name="year" value="{{ form.year.data }}">
         <input type="hidden" name="family_name" value="{{ form.family_name.data }}">
@@ -71,11 +71,11 @@
             <input type="hidden" name="method" value="POST">
             <input type="submit" value="登録"  class="btn btn-primary">
         {% elif form.method.data == 'PUT' %}
-            <input type="hidden" name="member_id" value="{{ form.member_id.data }}">
+            <input type="hidden" name="id" value="{{ form.id.data }}">
             <input type="hidden" name="method" value="PUT">
             <input type="submit" value="更新"  class="btn btn-warning">
         {% elif form.method.data == 'DELETE' %}
-            <input type="hidden" name="member_id" value="{{ form.member_id.data }}">
+            <input type="hidden" name="id" value="{{ form.id.data }}">
             <input type="hidden" name="method" value="DELETE">
             <input type="submit" value="削除"  class="btn btn-danger">
         {% endif %}

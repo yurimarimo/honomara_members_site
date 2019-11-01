@@ -48,13 +48,13 @@
                                 <th>
                                         <form method="get" action="{{url_for('training_edit')}}">
                                             <input type="hidden" name="method" value="PUT">
-                                            <input type="hidden" name="training_id" value="{{training.training_id}}">
+                                            <input type="hidden" name="id" value="{{training.id}}">
                                             <input type="submit" value="編集"  class="btn btn-warning">
                                         </form>
                                 </th><th>
                                         <form method="post" action="{{url_for('training_confirm')}}">
                                                 <input type="hidden" name="method" value="DELETE">
-                                                <input type="hidden" name="training_id" value="{{training.training_id}}">
+                                                <input type="hidden" name="id" value="{{training.id}}">
                                                 <input type="submit" value="削除"  class="btn btn-danger">
                                         </form>
                                 </th>

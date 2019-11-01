@@ -47,14 +47,14 @@
                                 <th>
                                         <form method="get" action="{{url_for('after_edit')}}">
                                             <input type="hidden" name="method" value="PUT">
-                                            <input type="hidden" name="after_id" value="{{after.after_id}}">
+                                            <input type="hidden" name="id" value="{{after.id}}">
                                             <input type="submit" value="編集"  class="btn btn-warning">
                                         </form>
                                 </th>
                                 <th>
                                         <form method="post" action="{{url_for('after_confirm')}}">
                                                 <input type="hidden" name="method" value="DELETE">
-                                                <input type="hidden" name="after_id" value="{{after.after_id}}">
+                                                <input type="hidden" name="id" value="{{after.id}}">
                                                 <input type="submit" value="削除"  class="btn btn-danger">
                                         </form>
                                 </th>    

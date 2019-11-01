@@ -43,7 +43,7 @@
 </div>
 <form id="form-id" action="{{url_for('race_confirm')}}" method="post">
         {{ form.csrf_token }}
-        {{ form.race_id }}
+        {{ form.id }}
         {{ form.method }}
         <input type="hidden" name="race_name" value="{{ form.race_name.data }}">
         <input type="hidden" name="race_name_option" value="{{ form.race_name_option.data }}">
@@ -54,11 +54,11 @@
             <input type="hidden" name="method" value="POST">
             <input type="submit" value="登録"  class="btn btn-primary">
         {% elif form.method.data == 'PUT' %}
-            <input type="hidden" name="race_id" value="{{ form.race_id.data }}">
+            <input type="hidden" name="id" value="{{ form.id.data }}">
             <input type="hidden" name="method" value="PUT">
             <input type="submit" value="更新"  class="btn btn-warning">
         {% elif form.method.data == 'DELETE' %}
-            <input type="hidden" name="race_id" value="{{ form.race_id.data }}">
+            <input type="hidden" name="id" value="{{ form.id.data }}">
             <input type="hidden" name="method" value="DELETE">
             <input type="submit" value="削除"  class="btn btn-danger">
         {% endif %}

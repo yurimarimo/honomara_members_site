@@ -26,7 +26,7 @@
                     <tbody>
                         {% for member in members %}
                         <tr>
-                                <th>{{  member.year }}</th>
+                                <th>{{ member.year }}</th>
                                 <th>{{ member.family_name }}{{"(" + member.family_kana  + ")"  if member.family_kana  }}</th>
                                 <th>{{ member.first_name }}{{"(" + member.first_kana  + ")"  if member.first_kana  }}</th>
                                 <th>{{ member.show_name }}</th>
@@ -47,14 +47,14 @@
                                 <th>
                                     <form method="get" action="{{url_for('member_edit')}}">
                                         <input type="hidden" name="method" value="PUT">
-                                        <input type="hidden" name="member_id" value="{{member.member_id}}">
+                                        <input type="hidden" name="id" value="{{member.id}}">
                                         <input type="submit" value="編集"  class="btn btn-warning">
                                     </form>
                             </th>
                                 <th>
                                     <form method="post" action="{{url_for('member_confirm')}}">
                                             <input type="hidden" name="method" value="DELETE">
-                                            <input type="hidden" name="member_id" value="{{member.member_id}}">
+                                            <input type="hidden" name="id" value="{{member.id}}">
                                             <input type="submit" value="削除"  class="btn btn-danger">
                                     </form>
                                 </th>    
