@@ -31,12 +31,6 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/manage/')
-@login_required
-def manage():
-    return render_template('manage.html')
-
-
 @app.route('/member/')
 @login_required
 def member():
@@ -102,8 +96,6 @@ def training():
     trainings = Training.query.order_by(
         Training.date.desc()).paginate(page, per_page)
     return render_template('training.html', pagination=trainings)
-
-# visible_member_list_for_form = []
 
 
 @app.route('/training/edit', methods=['GET', 'POST'])
@@ -270,7 +262,6 @@ def race_edit():
 @login_required
 def race_confirm():
     form = RaceForm(formdata=request.form)
-    # form.visible.data = request.form.get('visible') != 'False'
     app.logger.info(request.form)
 
     if request.form.get('submit') == 'キャンセル':
@@ -310,7 +301,6 @@ def race_confirm():
 @app.route('/result/edit', methods=['GET', 'POST'])
 @login_required
 def result_edit():
-    # app.logger.info(request.form)
     form = ResultForm(formdata=request.form)
 
     if form.validate_on_submit():
@@ -342,8 +332,6 @@ def result_edit():
 def result_confirm():
     form = ResultForm(formdata=request.form)
     app.logger.info(request.form)
-
-    # form.visible.data = request.form.get('visible') != 'False'
 
     if request.form.get('submit') == 'キャンセル':
         return redirect(url_for('user'))
