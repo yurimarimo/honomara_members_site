@@ -19,6 +19,8 @@ class Member(db.Model):
     sex = db.Column(db.Integer, nullable=False)
     visible = db.Column(db.Boolean, nullable=False)
 
+    results = db.relationship('Result')
+
     def __init__(self, form=None, **args):
         return super().__init__(**args)
 
@@ -134,7 +136,7 @@ class RaceBase(db.Model):
     race_name = db.Column(db.String(100), primary_key=True)
     prefecture = db.Column(db.String(100))
     comment = db.Column(db.Text)
-
+    races = db.relationship("Race")
     def __init__(self, form=None, **args):
         return super().__init__(**args)
 
@@ -147,10 +149,11 @@ class Race(db.Model):
     __tablename__ = 'races'
 
     race_id = db.Column(db.Integer, primary_key=True)
-    race_name = db.Column(db.String(100))
+    race_name = db.Column(db.String(100), db.ForeignKey('race_bases.race_name'))
     date = db.Column(db.Date, nullable=False)
 
     results = db.relationship('Result',
+                              backref="race",
                               order_by='Result.result'
                               )
     comment = db.Column(db.Text)
@@ -190,16 +193,18 @@ class Result(db.Model):
 
     member_id = db.Column(db.Integer, db.ForeignKey(
         'members.member_id'), primary_key=True)
+    member = db.relationship('Member')
+
     race_id = db.Column(db.Integer, db.ForeignKey(
         'races.race_id'), primary_key=True)
+    # race by backref
+
     race_type_id = db.Column(db.Integer, db.ForeignKey(
         'race_types.race_type_id'), primary_key=True)
+    race_type = db.relationship('RaceType')
+
     result = db.Column(db.Integer, nullable=False)
     comment = db.Column(db.Text)
-
-    race = db.relationship('Race')
-    race_type = db.relationship('RaceType')
-    member = db.relationship('Member')
 
     def __repr__(self):
         return "<Result(race:{}({:%Y-%m-%d}), race_type:{}, member:{}, result:{}, comment:{})>".\

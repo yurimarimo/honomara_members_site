@@ -2,10 +2,10 @@ from flask import render_template, request, abort, redirect, url_for, flash
 from flask_bootstrap import Bootstrap
 from honomara_members_site import app
 from honomara_members_site.login import user_check, users
-from honomara_members_site.model import db, Member, Training, After, Restaurant, Race
+from honomara_members_site.model import db, Member, Training, After, Restaurant, Race, RaceBase, RaceType, Result
 from flask_login import login_required, login_user, logout_user
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, RadioField, IntegerField
+from wtforms import StringField, SubmitField, RadioField, IntegerField, FloatField
 from wtforms import HiddenField, TextAreaField, DateField, SelectMultipleField, SelectField
 from wtforms.validators import Optional, InputRequired
 
@@ -304,3 +304,214 @@ def result():
     page = max([1, int(page)])
     results = Race.query.order_by(Race.date.desc()).paginate(page, per_page)
     return render_template('result.html', pagination=results)
+
+
+@app.route('/race/')
+def race():
+    return redirect(url_for('result'))
+
+
+race_base_list_for_form = [(r.race_name, r.race_name)
+                           for r in RaceBase.query.all()]
+
+
+class RaceForm(FlaskForm):
+    race_id = HiddenField(validators=[Optional()])
+    race_name = SelectField('大会名:', coerce=str, validators=[Optional()],
+                            choices=race_base_list_for_form)
+    race_name_option = StringField('大会名（選択肢にない場合）:', validators=[Optional()])
+    date = DateField('大会日時:', validators=[InputRequired()])
+    comment = TextAreaField('コメント:', validators=[Optional()])
+    confirmed = HiddenField(validators=[Optional()])
+    method = HiddenField(validators=[Optional()])
+    submit = SubmitField('確定', validators=[Optional()])
+
+
+@app.route('/race/edit', methods=['GET', 'POST'])
+@login_required
+def race_edit():
+    app.logger.info(request.form)
+    RaceBaseForm.race_name.choices = [
+        (r.race_name, r.race_name) for r in RaceBase.query.all()]
+    form = RaceForm(formdata=request.form)
+
+    if form.validate_on_submit():
+        return redirect(url_for('race_confirm'), code=307)
+    form.race_name.choices = [
+        (r.race_name, r.race_name) for r in RaceBase.query.all()]
+
+    if request.args.get('method') == 'PUT':
+        race_id = int(request.args.get('race_id'))
+        race = Race.query.get(race_id)
+        form = RaceForm(obj=race)
+        form.method.data = 'PUT'
+    else:
+        form.method.data = 'POST'
+
+    return render_template('race_edit.html', form=form)
+
+
+@app.route('/race/confirm', methods=['POST'])
+@login_required
+def race_confirm():
+    form = RaceForm(formdata=request.form)
+    # form.visible.data = request.form.get('visible') != 'False'
+    app.logger.info(request.form)
+
+    if request.form.get('submit') == 'キャンセル':
+        return redirect(url_for('user'))
+
+    if form.validate_on_submit() and request.form.get('confirmed'):
+        if request.form.get('method') in ['PUT', 'POST'] and len(form.race_name_option.data) > 3:
+            rb = RaceBase.query.get(form.race_name_option.data)
+            if rb is None:
+                rb = RaceBase()
+                rb.race_name = form.race_name_option.data
+                db.session.add(rb)
+                db.session.commit()
+                app.logger.info('register race_base {}'.format(rb))
+            form.race_name.data = rb.race_name
+
+        if request.form.get('method') == 'DELETE':
+            race = Race.query.get(form.race_id.data)
+            db.session.delete(race)
+        elif request.form.get('method') == 'PUT':
+            race = Race.query.get(form.race_id.data)
+            form.populate_obj(race)
+        elif request.form.get('method') == 'POST':
+            race = Race()
+            form.populate_obj(race)
+            race.race_id = None
+            db.session.add(race)
+        db.session.commit()
+        return redirect(url_for('race'))
+    else:
+        if request.form.get('method') == 'DELETE':
+            race = Race.query.get(form.race_id.data)
+            form = RaceForm(obj=race)
+        return render_template('race_confirm.html', form=form)
+
+
+class RaceBaseForm(FlaskForm):
+    race_name = SelectField('大会名:', coerce=str, validators=[Optional()],
+                            choices=race_base_list_for_form)
+    race_name_option = StringField('大会名（選択肢にない場合）:', validators=[Optional()])
+    prefecture = SelectField('開催都道府県:', validators=[InputRequired()],
+                             choices=[('北海道', '北海道'), ('青森県', '青森県'), ('岩手県', '岩手県'),
+                                      ('宮城県', '宮城県'), ('秋田県', '秋田県'),
+                                      ('山形県', '山形県'), ('福島県', '福島県'),
+                                      ('茨城県', '茨城県'), ('栃木県', '栃木県'),
+                                      ('群馬県', '群馬県'), ('埼玉県', '埼玉県'),
+                                      ('千葉県', '千葉県'), ('東京都', '東京都'),
+                                      ('神奈川県', '神奈川県'), ('新潟県', '新潟県'),
+                                      ('富山県', '富山県'), ('石川県', '石川県'),
+                                      ('福井県', '福井県'), ('山梨県', '山梨県'), ('長野', '長野'),
+                                      ('奈良県', '奈良県'), ('和歌山県', '和歌山県'),
+                                      ('鳥取県', '鳥取県'), ('島根県', '島根県'),
+                                      ('岡山県', '岡山県'), ('広島県', '広島県'),
+                                      ('山口県', '山口県'),
+                                      ('徳島県', '徳島県'),
+                                      ('香川県', '香川県'), ('愛媛県',
+                                                       '愛媛県'),
+                                      ('高知県', '高知県'),
+                                      ('福岡県', '福岡県'), ('佐賀県', '佐賀県'),
+                                      ('長崎県', '長崎県'), ('熊本県',
+                                                       '熊本県'), ('大分県', '大分県'),
+                                      ('宮崎県', '宮崎県'), ('鹿児島県', '鹿児島県'),
+                                      ('沖縄県', '沖縄県')])
+    comment = TextAreaField('コメント:', validators=[Optional()])
+    confirmed = HiddenField(validators=[Optional()])
+    method = HiddenField(validators=[Optional()])
+    submit = SubmitField('確定', validators=[Optional()])
+
+
+race_list_for_form = [(r.race_id, r.race_name) for r in Race.query.all()]
+race_type_list_for_form = [(r.race_type_id, r.show_name)
+                           for r in RaceType.query.all()]
+
+
+class ResultForm(FlaskForm):
+    member_id = SelectField('参加者:', coerce=int, validators=[InputRequired()],
+                            choices=visible_member_list_for_form)
+
+    race_id = SelectField('大会:', coerce=int, validators=[InputRequired()],
+                          choices=race_list_for_form)
+
+    race_type_id = SelectField('種目:', coerce=int, validators=[InputRequired()],
+                               choices=race_type_list_for_form)
+    result = FloatField('記録:', validators=[InputRequired()])
+    comment = TextAreaField('備考:', validators=[Optional()])
+    confirmed = HiddenField(validators=[Optional()])
+    method = HiddenField(validators=[Optional()])
+    submit = SubmitField('確定', validators=[Optional()])
+
+
+@app.route('/result/edit', methods=['GET', 'POST'])
+@login_required
+def result_edit():
+    # app.logger.info(request.form)
+    form = ResultForm(formdata=request.form)
+
+    if form.validate_on_submit():
+        return redirect(url_for('result_confirm'), code=307)
+
+    if request.args.get('method') == 'PUT':
+        race_id = int(request.args.get('race_id'))
+        race_type_id = int(request.args.get('race_type_id'))
+        member_id = int(request.args.get('member_id'))
+        result = Result.query.get(
+            {"race_id": race_id, "race_type_id": race_type_id, "member_id": member_id})
+        form = ResultForm(obj=result)
+        form.race = Race.query.get(race_type_id)
+        form.method.data = 'PUT'
+
+    else:
+        race_id = int(request.args.get('race_id'))
+        result = Result()
+        result.race_id = race_id
+        form = ResultForm(obj=result)
+        form.race = Race.query.get(race_id)
+        form.method.data = 'POST'
+
+    return render_template('result_edit.html', form=form)
+
+
+@app.route('/result/confirm', methods=['POST'])
+@login_required
+def result_confirm():
+    form = ResultForm(formdata=request.form)
+    app.logger.info(request.form)
+
+    # form.visible.data = request.form.get('visible') != 'False'
+
+    if request.form.get('submit') == 'キャンセル':
+        return redirect(url_for('user'))
+
+    race_id = int(form.race_id.data)
+    race_type_id = int(form.race_type_id.data)
+    member_id = int(form.member_id.data)
+
+    if form.validate_on_submit() and request.form.get('confirmed'):
+        if request.form.get('method') == 'DELETE':
+            result = Result.query.get(
+                {"race_id": race_id, "race_type_id": race_type_id, "member_id": member_id})
+            db.session.delete(result)
+        elif request.form.get('method') == 'PUT':
+            result = Result.query.get(
+                {"race_id": race_id, "race_type_id": race_type_id, "member_id": member_id})
+            form.populate_obj(result)
+        elif request.form.get('method') == 'POST':
+            result = Result()
+            form.populate_obj(result)
+            db.session.add(result)
+        db.session.commit()
+        return redirect(url_for('result'))
+    else:
+        if request.form.get('method') == 'DELETE':
+            result = Result.query.get(
+                {"race_id": race_id, "race_type_id": race_type_id, "member_id": member_id})
+            form = ResultForm(obj=result)
+        form.member = Member.query.get(int(form.member_id.data))
+        form.race_type = RaceType.query.get(int(form.race_type_id.data))
+        form.race = Race.query.get(int(form.race_id.data))
+        return render_template('result_confirm.html', form=form)
