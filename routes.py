@@ -302,6 +302,7 @@ def race_confirm():
 @login_required
 def result_edit():
     form = ResultForm(formdata=request.form)
+    form.result.data = form.result_h.data * 3600 + form.result_m.data * 60 + form.result_s.data
 
     if form.validate_on_submit():
         return redirect(url_for('result_confirm'), code=307)
@@ -331,7 +332,7 @@ def result_edit():
 @login_required
 def result_confirm():
     form = ResultForm(formdata=request.form)
-    app.logger.info(request.form)
+    form.result.data = form.result_h.data * 3600 + form.result_m.data * 60 + form.result_s.data
 
     if request.form.get('submit') == 'キャンセル':
         return redirect(url_for('user'))

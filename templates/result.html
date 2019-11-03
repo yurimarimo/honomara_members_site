@@ -67,7 +67,7 @@
                                         <tr>
                                             <th>{{ result.member.show_name }}</th>
                                             <th>{{ result.race_type.show_name }}</th>
-                                            <th>{{  "{:02}:{:02}:{:02}".format(int(result.result)//3600,(int(result.result)%3600)//60,int(result.result)%60)}}</th>
+                                            <th>{{"{:02}:{:02}:{:02}".format(int(result.result)//3600,(int(result.result)%3600)//60,int(result.result)%60)}}</th>
                                             <th>{{ result.comment }}
                                                     {% if current_user.is_authenticated %}
                                                     <form method="get" action="{{url_for('result_edit')}}"

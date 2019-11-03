@@ -28,7 +28,7 @@
                                     <tr>
                                             <th>{{ form.member.show_name }}</th>
                                             <th>{{ form.race_type.show_name }}</th>
-                                            <th> {{ form.result.data }}</th>
+                                            <th>{{"{:02}:{:02}:{:02}".format(int(form.result.data)//3600,(int(form.result.data)%3600)//60,int(form.result.data)%60)}}</th>
                                             <th> {{ form.comment.data }}</th>
                                     </tr>
                                 </tbody>
@@ -45,6 +45,9 @@
         <input type="hidden" name="race_id" value="{{ form.race_id.data }}">
         <input type="hidden" name="race_type_id" value="{{ form.race_type_id.data }}">
         <input type="hidden" name="result" value="{{ form.result.data }}">
+        <input type="hidden" name="result_h" value="{{ form.result_h.data }}">
+        <input type="hidden" name="result_m" value="{{ form.result_m.data }}">
+        <input type="hidden" name="result_s" value="{{ form.result_s.data }}">
         <input type="hidden" name="comment" value="{{ form.comment.data }}">
         <input type="hidden" name="confirmed" value="True">
         {% if form.method.data == 'POST' %}
