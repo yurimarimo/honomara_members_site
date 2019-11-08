@@ -222,6 +222,7 @@ def after_confirm():
             form.restaurant.data = after.restaurant
         return render_template('after_confirm.html', form=form)
 
+from itertools import groupby
 
 @app.route('/result/')
 def result():
@@ -229,7 +230,7 @@ def result():
     page = request.args.get('page') or 1
     page = max([1, int(page)])
     results = Race.query.order_by(Race.date.desc()).paginate(page, per_page)
-    return render_template('result.html', pagination=results)
+    return render_template('result.html', pagination=results,groupby=groupby,key=(lambda x: x.race_type.show_name))
 
 
 @app.route('/race/')
