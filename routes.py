@@ -1,3 +1,4 @@
+from itertools import groupby
 from flask import render_template, request, abort, redirect, url_for
 from honomara_members_site import app, db, bcrypt
 from honomara_members_site.login import user_check, users
@@ -124,7 +125,10 @@ def training_edit():
 @app.route('/training/confirm', methods=['POST'])
 @login_required
 def training_confirm():
+    app.logger.info(request.form)
     form = TrainingForm(formdata=request.form)
+    app.logger.info(form.participants.data)
+
     if request.form.get('submit') == 'キャンセル':
         return redirect(url_for('training'))
 
@@ -151,6 +155,8 @@ def training_confirm():
             training = Training.query.get(form.id.data)
             form = TrainingForm(obj=training)
             form.participants.data = training.participants
+        app.logger.info(form.participants.data)
+
         return render_template('training_confirm.html', form=form)
 
 
@@ -190,7 +196,7 @@ def after_confirm():
     form = AfterForm(formdata=request.form)
     app.logger.info(request.form)
     if request.form.get('submit') == 'キャンセル':
-        return redirect(url_for('training'))
+        return redirect(url_for('after'))
 
     if form.participants.data:
         form.participants.data = [Member.query.get(
@@ -222,7 +228,6 @@ def after_confirm():
             form.restaurant.data = after.restaurant
         return render_template('after_confirm.html', form=form)
 
-from itertools import groupby
 
 @app.route('/result/')
 def result():
@@ -230,7 +235,7 @@ def result():
     page = request.args.get('page') or 1
     page = max([1, int(page)])
     results = Race.query.order_by(Race.date.desc()).paginate(page, per_page)
-    return render_template('result.html', pagination=results,groupby=groupby,key=(lambda x: x.race_type.show_name))
+    return render_template('result.html', pagination=results, groupby=groupby, key=(lambda x: x.race_type.show_name))
 
 
 @app.route('/race/')
@@ -320,6 +325,9 @@ def result_edit():
             {"race_id": race_id, "race_type_id": race_type_id, "member_id": member_id})
         form = ResultForm(obj=result)
         form.race = Race.query.get(race_type_id)
+        form.result_h.data = int(result.result)//3600
+        form.result_m.data = (int(result.result) % 3600)//60
+        form.result_s.data = int(result.result) % 60
         form.method.data = 'PUT'
 
     else:

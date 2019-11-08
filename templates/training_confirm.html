@@ -43,7 +43,7 @@
 <div class="row bs_component">
     <form id="form-id" action="{{url_for('training_confirm')}}" method="post">
             {{ form.csrf_token }}
-            {{ form.training_id }}
+            {{ form.id }}
             {{ form.method }}
             <input type="hidden" name="date" value="{{ form.date.data }}">
             <input type="hidden" name="weather" value="{{ form.weather.data }}">
@@ -53,15 +53,15 @@
             <input type="hidden" name="method" value="{{ form.method.data }}">
             <input type="hidden" name="confirmed" value="True">
             {% for m in form.participants.data %}
-                <input type="hidden" name="participants" value="{{ m.member_id }}">
+                <input type="hidden" name="participants" value="{{ m.id }}">
             {% endfor %}
             {% if form.method.data == 'POST' %}
                 <input type="submit" value="登録"  class="btn btn-primary">
             {% elif form.method.data == 'PUT' %}
-                <input type="hidden" name="training_id" value="{{ form.training_id.data }}">
+                <input type="hidden" name="id" value="{{ form.id.data }}">
                 <input type="submit" value="更新"  class="btn btn-warning">
             {% elif form.method.data == 'DELETE' %}
-                <input type="hidden" name="training_id" value="{{ form.training_id.data }}">
+                <input type="hidden" name="id" value="{{ form.id.data }}">
                 <input type="submit" value="削除"  class="btn btn-danger">
             {% endif %}
         <a href="{{url_for('training')}}" class="btn btn-default">キャンセル</a>

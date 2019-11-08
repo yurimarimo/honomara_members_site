@@ -41,25 +41,25 @@
 <div class="row bs_component">
     <form id="form-id" action="{{url_for('after_confirm')}}" method="post">
             {{ form.csrf_token }}
-            {{ form.after_id }}
+            {{ form.id }}
             {{ form.method }}
             <input type="hidden" name="date" value="{{ form.date.data }}">
             <input type="hidden" name="after_stage" value="{{ form.after_stage.data }}">
-            <input type="hidden" name="restaurant" value="{{ form.restaurant.data.restaurant_id }}">
+            <input type="hidden" name="restaurant" value="{{ form.restaurant.data.id }}">
             <input type="hidden" name="title" value="{{ form.title.data }}">
             <input type="hidden" name="comment" value="{{ form.comment.data }}">
             <input type="hidden" name="method" value="{{ form.method.data }}">
             <input type="hidden" name="confirmed" value="True">
             {% for m in form.participants.data %}
-                <input type="hidden" name="participants" value="{{ m.member_id }}">
+                <input type="hidden" name="participants" value="{{ m.id }}">
             {% endfor %}
             {% if form.method.data == 'POST' %}
                 <input type="submit" value="登録"  class="btn btn-primary">
             {% elif form.method.data == 'PUT' %}
-                <input type="hidden" name="after_id" value="{{ form.after_id.data }}">
+                <input type="hidden" name="id" value="{{ form.id.data }}">
                 <input type="submit" value="更新"  class="btn btn-warning">
             {% elif form.method.data == 'DELETE' %}
-                <input type="hidden" name="after_id" value="{{ form.after_id.data }}">
+                <input type="hidden" name="id" value="{{ form.id.data }}">
                 <input type="submit" value="削除"  class="btn btn-danger">
             {% endif %}
         <a href="{{url_for('after')}}" class="btn btn-default">キャンセル</a>
