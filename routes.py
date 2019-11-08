@@ -375,7 +375,7 @@ def result_confirm():
 @app.route('/ranking')
 @login_required
 def ranking():
-    q1 = db.session.query(Member.show_name, func.count(TrainingParticipant.training_id).label('cnt')).\
+    q1 = db.session.query(Member.show_name, func.count(TrainingParticipant.training_id).label('cnt'), Member.sex).\
         join(TrainingParticipant, TrainingParticipant.member_id == Member.id).\
         group_by(TrainingParticipant.member_id)
     year_list = request.args.getlist('year_list')
@@ -386,7 +386,7 @@ def ranking():
     else:
         q2 = q1
 
-    items = [{'rank': i+1, 'show_name': d[0], 't_cnt': d[1]}
+    items = [{'rank': i+1, 'show_name': d[0], 't_cnt': d[1], 'sex': d[2]}
              for i, d in enumerate(q2.order_by(db.text('cnt DESC')).all())
              ]
 
