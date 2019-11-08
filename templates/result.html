@@ -76,14 +76,14 @@
                             <h3>{{ result_by_type[0] }}</h3>
                             {% for result in result_by_type[1] %}
                             <div class="borders clearfix">
-                                <p style="font-size: 1.2em;" class="col-xs-4 col-sm-2 col-lg-1">
+                                <p style="font-size: 1.2em;" class="col-xs-4 col-sm-2 col-lg-2">
                                     {{result.member.show_name}}
                                 </p>
                                 <p style="font-size: 1.2em;" class="col-xs-4 col-sm-2 col-lg-2 ">
                                     {{"{:02}:{:02}:{:02}".format(int(result.result)//3600,(int(result.result)%3600)//60,int(result.result)%60)}}
                                     <br>
                                 </p>
-                                <p style="font-size: 1.2em;" class="col-xs-8 col-sm-5 col-lg-6 ">
+                                <p style="font-size: 1.2em;" class="col-xs-8 col-sm-5 col-lg-5 ">
                                     {{ result.comment }}
                                 </p>
                                 {% if current_user.is_authenticated %}
