@@ -373,7 +373,6 @@ def result_confirm():
 
 
 @app.route('/ranking')
-@login_required
 def ranking():
     q1 = db.session.query(Member.show_name, func.count(TrainingParticipant.training_id).label('cnt'), Member.sex).\
         join(TrainingParticipant, TrainingParticipant.member_id == Member.id).\
