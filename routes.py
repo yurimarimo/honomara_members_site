@@ -2,8 +2,11 @@ from flask import render_template, request, abort, redirect, url_for
 from honomara_members_site import app, db, bcrypt
 from honomara_members_site.login import user_check, users
 from honomara_members_site.model import Member, Training, After, Restaurant, Race, RaceBase, RaceType, Result
+from honomara_members_site.model import TrainingParticipant
+from sqlalchemy import func
 from honomara_members_site.form import MemberForm, TrainingForm, AfterForm, RaceBaseForm, RaceForm, ResultForm
 from flask_login import login_required, login_user, logout_user
+from honomara_members_site.util import current_school_year
 
 
 @app.route('/')
@@ -302,7 +305,8 @@ def race_confirm():
 @login_required
 def result_edit():
     form = ResultForm(formdata=request.form)
-    form.result.data = form.result_h.data * 3600 + form.result_m.data * 60 + form.result_s.data
+    form.result.data = form.result_h.data * 3600 + \
+        form.result_m.data * 60 + form.result_s.data
 
     if form.validate_on_submit():
         return redirect(url_for('result_confirm'), code=307)
@@ -332,7 +336,8 @@ def result_edit():
 @login_required
 def result_confirm():
     form = ResultForm(formdata=request.form)
-    form.result.data = form.result_h.data * 3600 + form.result_m.data * 60 + form.result_s.data
+    form.result.data = form.result_h.data * 3600 + \
+        form.result_m.data * 60 + form.result_s.data
 
     if request.form.get('submit') == 'キャンセル':
         return redirect(url_for('user'))
@@ -365,3 +370,24 @@ def result_confirm():
         form.race_type = RaceType.query.get(int(form.race_type_id.data))
         form.race = Race.query.get(int(form.race_id.data))
         return render_template('result_confirm.html', form=form)
+
+
+@app.route('/ranking')
+@login_required
+def ranking():
+    q1 = db.session.query(Member.show_name, func.count(TrainingParticipant.training_id).label('cnt')).\
+        join(TrainingParticipant, TrainingParticipant.member_id == Member.id).\
+        group_by(TrainingParticipant.member_id)
+    year_list = request.args.getlist('year_list')
+    app.logger.info(year_list)
+    if year_list:
+        q2 = q1.\
+            filter(Member.year.in_(year_list))
+    else:
+        q2 = q1
+
+    items = [{'rank': i+1, 'show_name': d[0], 't_cnt': d[1]}
+             for i, d in enumerate(q2.order_by(db.text('cnt DESC')).all())
+             ]
+
+    return render_template('ranking.html', items=items, years=range(current_school_year,1990,-1))
