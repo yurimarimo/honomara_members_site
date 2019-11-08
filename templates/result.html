@@ -1,16 +1,16 @@
 {% extends "template.html" %}
 {% block content %}
 <div class="container">
-    {% if current_user.is_authenticated %}
-    <div class="row">
-        <a href="{{url_for('race_edit')}}" class="btn btn-primary btn-lg">新規大会登録</a>
-    </div>
-    {% endif %}
 
     <div class="row">
         <div class="col-lg-12">
             <div class="page-header">
-                <h1 id="tables">大会記録</h1>
+                <h1 id="tables">大会記録
+                        {% if current_user.is_authenticated %}
+                            <a href="{{url_for('race_edit')}}" class="btn btn-primary btn-lg">新規大会登録</a>
+                        {% endif %}
+
+                </h1>
                 <div class="bs-component">
                     <ul class="pager">
                         <li class="previous {{ "disabled" if not pagination.has_prev}}"><a
