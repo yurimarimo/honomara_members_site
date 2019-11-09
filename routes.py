@@ -42,6 +42,26 @@ def member():
     return render_template('member.html', members=members)
 
 
+@app.route('/member/<int:member_id>')
+@login_required
+def member_individual(member_id):
+    m = Member.query.get(member_id)
+    if m is None:
+        return abort(404)
+
+    m.results.sort(key=lambda x: x.race.date, reverse=False)
+    raw_results = list(
+        filter(lambda x: x.race_type.show_name == 'フルマラソン', m.results))
+
+    results = []
+    races = []
+    for r in raw_results:
+        results += [{'x': "{:%Y/%m/%d}".format(r.race.date), 'y': r.result}]
+        races += [r.race.race_name]
+
+    return render_template('member_individual.html', member=m,races=str(races),results=str(results))
+
+
 @app.route('/member/edit', methods=['GET', 'POST'])
 @login_required
 def member_edit():
