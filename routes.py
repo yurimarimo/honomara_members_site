@@ -1,5 +1,5 @@
 from itertools import groupby
-from flask import render_template, request, abort, redirect, url_for
+from flask import render_template, request, abort, redirect, url_for, flash
 from honomara_members_site import app, db, bcrypt
 from honomara_members_site.login import user_check, users
 from honomara_members_site.model import Member, Training, After, Restaurant, Race, RaceBase, RaceType, Result
@@ -59,7 +59,7 @@ def member_individual(member_id):
         results += [{'x': "{:%Y/%m/%d}".format(r.race.date), 'y': r.result}]
         races += [r.race.race_name]
 
-    return render_template('member_individual.html', member=m,races=str(races),results=str(results))
+    return render_template('member_individual.html', member=m, races=str(races), results=str(results))
 
 
 @app.route('/member/edit', methods=['GET', 'POST'])
@@ -94,15 +94,24 @@ def member_confirm():
         if request.form.get('method') == 'DELETE':
             member = Member.query.get(form.id.data)
             db.session.delete(member)
+            db.session.commit()
+            flash('メンバー："{} {}"の削除が完了しました'.format(
+                member.family_name, member.first_name), 'danger')
         elif request.form.get('method') == 'PUT':
             member = Member.query.get(form.id.data)
             form.populate_obj(member)
+            db.session.commit()
+            flash('メンバー："{} {}"の更新が完了しました'.format(
+                member.family_name, member.first_name), 'warning')
         elif request.form.get('method') == 'POST':
             member = Member()
             form.populate_obj(member)
             member.id = None
             db.session.add(member)
-        db.session.commit()
+            db.session.commit()
+            flash('メンバー："{} {}"の更新が完了しました'.format(
+                member.family_name, member.first_name), 'info')
+
         return redirect(url_for('member'))
     else:
         if request.form.get('method') == 'DELETE':
@@ -159,19 +168,28 @@ def training_confirm():
         if request.form.get('method') == 'DELETE':
             training = Training.query.get(form.id.data)
             db.session.delete(training)
+            db.session.commit()
+            flash('練習録: "{}" の削除が完了しました'.format(training.title), 'danger')
         elif request.form.get('method') == 'PUT':
             training = Training.query.get(form.id.data)
-            training.title = training.title.encode('euc-jp',errors='xmlcharrefreplace').decode('euc-jp')
-            training.comment = training.comment.encode('euc-jp',errors='xmlcharrefreplace').decode('euc-jp')
+            training.title = training.title.encode(
+                'euc-jp', errors='xmlcharrefreplace').decode('euc-jp')
+            training.comment = training.comment.encode(
+                'euc-jp', errors='xmlcharrefreplace').decode('euc-jp')
             form.populate_obj(training)
+            db.session.commit()
+            flash('練習録: "{}" の更新が完了しました'.format(training.title), 'warning')
         elif request.form.get('method') == 'POST':
             training = Training()
             form.populate_obj(training)
-            training.title = training.title.encode('euc-jp',errors='xmlcharrefreplace').decode('euc-jp')
-            training.comment = training.comment.encode('euc-jp',errors='xmlcharrefreplace').decode('euc-jp')
+            training.title = training.title.encode(
+                'euc-jp', errors='xmlcharrefreplace').decode('euc-jp')
+            training.comment = training.comment.encode(
+                'euc-jp', errors='xmlcharrefreplace').decode('euc-jp')
             training.id = None
             db.session.add(training)
-        db.session.commit()
+            db.session.commit()
+            flash('練習録: "{}" の登録が完了しました'.format(training.title), 'info')
         return redirect(url_for('training'))
     else:
         if request.form.get('method') == 'DELETE':
@@ -233,19 +251,31 @@ def after_confirm():
         if request.form.get('method') == 'DELETE':
             after = After.query.get(form.id.data)
             db.session.delete(after)
+            db.session.commit()
+            flash('アフター録: "{}" の削除が完了しました'.format(after.title), 'danger')
+
         elif request.form.get('method') == 'PUT':
             after = After.query.get(form.id.data)
-            after.title = after.title.encode('euc-jp',errors='xmlcharrefreplace').decode('euc-jp')
-            after.comment = after.comment.encode('euc-jp',errors='xmlcharrefreplace').decode('euc-jp')
+            after.title = after.title.encode(
+                'euc-jp', errors='xmlcharrefreplace').decode('euc-jp')
+            after.comment = after.comment.encode(
+                'euc-jp', errors='xmlcharrefreplace').decode('euc-jp')
             form.populate_obj(after)
+            db.session.commit()
+            flash('アフター録: "{}" の更新が完了しました'.format(after.title), 'warning')
+
         elif request.form.get('method') == 'POST':
             after = After()
             form.populate_obj(after)
-            after.title = after.title.encode('euc-jp',errors='xmlcharrefreplace').decode('euc-jp')
-            after.comment = after.comment.encode('euc-jp',errors='xmlcharrefreplace').decode('euc-jp')
+            after.title = after.title.encode(
+                'euc-jp', errors='xmlcharrefreplace').decode('euc-jp')
+            after.comment = after.comment.encode(
+                'euc-jp', errors='xmlcharrefreplace').decode('euc-jp')
             after.id = None
             db.session.add(after)
-        db.session.commit()
+            db.session.commit()
+            flash('アフター録: "{}" の登録が完了しました'.format(after.title), 'info')
+
         return redirect(url_for('after'))
     else:
         if request.form.get('method') == 'DELETE':
@@ -317,15 +347,26 @@ def race_confirm():
         if request.form.get('method') == 'DELETE':
             race = Race.query.get(form.id.data)
             db.session.delete(race)
+            db.session.commit()
+            flash('大会: "{}({})" の削除が完了しました'.format(
+                race.race_name, race.date), 'danger')
+
         elif request.form.get('method') == 'PUT':
             race = Race.query.get(form.id.data)
             form.populate_obj(race)
+            db.session.commit()
+            flash('大会: "{}({})" の更新が完了しました'.format(
+                race.race_name, race.date), 'warning')
+
         elif request.form.get('method') == 'POST':
             race = Race()
             form.populate_obj(race)
             race.id = None
             db.session.add(race)
-        db.session.commit()
+            db.session.commit()
+            flash('大会: "{}({})" の登録が完了しました'.format(
+                race.race_name, race.date), 'info')
+
         return redirect(url_for('race'))
     else:
         if request.form.get('method') == 'DELETE':
@@ -387,15 +428,26 @@ def result_confirm():
             result = Result.query.get(
                 {"race_id": race_id, "race_type_id": race_type_id, "member_id": member_id})
             db.session.delete(result)
+            db.session.commit()
+            flash('{}さんの{}の結果の削除が完了しました'.format(
+                result.member.show_name, result.race.race_name), 'danger')
+
         elif request.form.get('method') == 'PUT':
             result = Result.query.get(
                 {"race_id": race_id, "race_type_id": race_type_id, "member_id": member_id})
             form.populate_obj(result)
+            db.session.commit()
+            flash('{}さんの{}の結果の更新が完了しました'.format(
+                result.member.show_name, result.race.race_name), 'warning')
+
         elif request.form.get('method') == 'POST':
             result = Result()
             form.populate_obj(result)
             db.session.add(result)
-        db.session.commit()
+            db.session.commit()
+            flash('{}さんの{}の結果の登録が完了しました'.format(
+                result.member.show_name, result.race.race_name), 'info')
+
         return redirect(url_for('result'))
     else:
         if request.form.get('method') == 'DELETE':
@@ -425,4 +477,4 @@ def ranking():
              for i, d in enumerate(q2.order_by(db.text('cnt DESC')).all())
              ]
 
-    return render_template('ranking.html', items=items, years=range(current_school_year,1990,-1))
+    return render_template('ranking.html', items=items, years=range(current_school_year, 1990, -1))
