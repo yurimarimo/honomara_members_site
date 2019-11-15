@@ -178,7 +178,7 @@ def training_confirm():
         if request.form.get('method') == 'DELETE':
             training = Training.query.get(form.id.data)
             form = TrainingForm(obj=training)
-            qform.participants.data = training.participants
+            form.participants.data = training.participants
         app.logger.info(form.participants.data)
 
         return render_template('training_confirm.html', form=form)
