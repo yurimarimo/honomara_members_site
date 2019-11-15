@@ -102,7 +102,6 @@ def member_confirm():
             member = Member()
             form.populate_obj(member)
             member.id = None
-            # member.kana = member.family_kana + member.first_kana
             db.session.add(member)
         db.session.commit()
         return redirect(url_for('member'))
@@ -179,7 +178,7 @@ def training_confirm():
         if request.form.get('method') == 'DELETE':
             training = Training.query.get(form.id.data)
             form = TrainingForm(obj=training)
-            form.participants.data = training.participants
+            qform.participants.data = training.participants
         app.logger.info(form.participants.data)
 
         return render_template('training_confirm.html', form=form)

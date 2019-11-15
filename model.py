@@ -8,7 +8,7 @@ class Member(db.Model):
     family_name = db.Column(db.String(30), nullable=False)
     first_name = db.Column(db.String(30), nullable=False)
     show_name = db.Column(db.String(30), nullable=False)
-    kana = db.Column(db.String(60), nullable=False)
+    # kana = db.Column(db.String(60), nullable=False)
     family_kana = db.Column(db.String(30), nullable=True)
     first_kana = db.Column(db.String(30), nullable=True)
     year = db.Column(db.Integer, nullable=False)
@@ -63,7 +63,7 @@ class Training(db.Model):
     participants = db.relationship(
         'Member',
         secondary=TrainingParticipant.__tablename__,
-        order_by='Member.year, Member.kana'
+        order_by='Member.year, Member.family_kana, Member.first_kana' 
     )
 
     def __init__(self, form=None, **args):
@@ -116,7 +116,7 @@ class After(db.Model):
     participants = db.relationship(
         'Member',
         secondary=AfterParticipant.__tablename__,
-        order_by='Member.year, Member.kana'
+        order_by='Member.year, Member.family_kana, Member.first_kana'
     )
 
     def __init__(self, form=None, **args):
