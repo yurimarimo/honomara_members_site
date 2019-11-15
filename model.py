@@ -92,6 +92,7 @@ class Restaurant(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     restaurant_name = db.Column(db.String(60), nullable=False)
     place = db.Column(db.String(20))
+    score = db.Column(db.Float, server_default=db.text('0') )
     comment = db.Column(db.Text)
 
     def __repr__(self):
