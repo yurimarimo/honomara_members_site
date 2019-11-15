@@ -8,7 +8,6 @@ from sqlalchemy import func
 from honomara_members_site.form import MemberForm, TrainingForm, AfterForm, RaceBaseForm, RaceForm, ResultForm
 from flask_login import login_required, login_user, logout_user
 from honomara_members_site.util import current_school_year
-from html import escape, unescape
 
 
 @app.route('/')
@@ -119,7 +118,7 @@ def training():
     page = max([1, int(page)])
     trainings = Training.query.order_by(
         Training.date.desc()).paginate(page, per_page)
-    return render_template('training.html', pagination=trainings, unescape=unescape)
+    return render_template('training.html', pagination=trainings)
 
 
 @app.route('/training/edit', methods=['GET', 'POST'])
@@ -190,7 +189,7 @@ def after():
     page = request.args.get('page') or 1
     page = max([1, int(page)])
     afters = After.query.order_by(After.date.desc()).paginate(page, per_page)
-    return render_template('after.html', pagination=afters, unescape=unescape)
+    return render_template('after.html', pagination=afters)
 
 
 @app.route('/after/edit', methods=['GET', 'POST'])
