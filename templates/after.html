@@ -54,8 +54,8 @@
             <div class="panel-body">
                 <div class="bs-component">
                     <dl>
-                        <dt> <b> {{after.title}} </b> </dt>
-                        <dd>{{after.comment}}</dd>
+                        <dt> <b> {{unescape(after.title)}} </b> </dt>
+                        <dd>{{unescape(after.comment)}}</dd>
                         <dt>参加者 ( {{ len(after.participants) }} ) </dt>
                         <dd>
                             {% for m in after.participants %}

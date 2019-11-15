@@ -8,6 +8,7 @@ from sqlalchemy import func
 from honomara_members_site.form import MemberForm, TrainingForm, AfterForm, RaceBaseForm, RaceForm, ResultForm
 from flask_login import login_required, login_user, logout_user
 from honomara_members_site.util import current_school_year
+from html import escape, unescape
 
 
 @app.route('/')
@@ -101,7 +102,7 @@ def member_confirm():
             member = Member()
             form.populate_obj(member)
             member.id = None
-            member.kana = member.family_kana + member.first_kana
+            # member.kana = member.family_kana + member.first_kana
             db.session.add(member)
         db.session.commit()
         return redirect(url_for('member'))
@@ -119,7 +120,7 @@ def training():
     page = max([1, int(page)])
     trainings = Training.query.order_by(
         Training.date.desc()).paginate(page, per_page)
-    return render_template('training.html', pagination=trainings)
+    return render_template('training.html', pagination=trainings, unescape=unescape)
 
 
 @app.route('/training/edit', methods=['GET', 'POST'])
@@ -162,10 +163,14 @@ def training_confirm():
             db.session.delete(training)
         elif request.form.get('method') == 'PUT':
             training = Training.query.get(form.id.data)
+            training.title = training.title.encode('euc-jp',errors='xmlcharrefreplace').decode('euc-jp')
+            training.comment = training.comment.encode('euc-jp',errors='xmlcharrefreplace').decode('euc-jp')
             form.populate_obj(training)
         elif request.form.get('method') == 'POST':
             training = Training()
             form.populate_obj(training)
+            training.title = training.title.encode('euc-jp',errors='xmlcharrefreplace').decode('euc-jp')
+            training.comment = training.comment.encode('euc-jp',errors='xmlcharrefreplace').decode('euc-jp')
             training.id = None
             db.session.add(training)
         db.session.commit()
@@ -186,7 +191,7 @@ def after():
     page = request.args.get('page') or 1
     page = max([1, int(page)])
     afters = After.query.order_by(After.date.desc()).paginate(page, per_page)
-    return render_template('after.html', pagination=afters)
+    return render_template('after.html', pagination=afters, unescape=unescape)
 
 
 @app.route('/after/edit', methods=['GET', 'POST'])
@@ -232,10 +237,14 @@ def after_confirm():
             db.session.delete(after)
         elif request.form.get('method') == 'PUT':
             after = After.query.get(form.id.data)
+            after.title = after.title.encode('euc-jp',errors='xmlcharrefreplace').decode('euc-jp')
+            after.comment = after.comment.encode('euc-jp',errors='xmlcharrefreplace').decode('euc-jp')
             form.populate_obj(after)
         elif request.form.get('method') == 'POST':
             after = After()
             form.populate_obj(after)
+            after.title = after.title.encode('euc-jp',errors='xmlcharrefreplace').decode('euc-jp')
+            after.comment = after.comment.encode('euc-jp',errors='xmlcharrefreplace').decode('euc-jp')
             after.id = None
             db.session.add(after)
         db.session.commit()
