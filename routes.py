@@ -38,8 +38,8 @@ def logout():
 @app.route('/member/')
 @login_required
 def member():
-    members = Member.query.order_by(Member.year.desc())
-    return render_template('member.html', members=members)
+    members = Member.query.order_by(Member.year.desc(), Member.family_kana)
+    return render_template('member.html', members=members, groupby=groupby, key=(lambda x: x.year))
 
 
 @app.route('/member/<int:member_id>')

@@ -9,61 +9,88 @@
                 </h1>
             </div>
             <div class="bs-component">
+                {% for members_by_year in groupby(members, key=key) %}
+                <h3>{{members_by_year[0] }}年度入学</h3>
                 <table class="table table-striped table-hover ">
                     <thead>
                         <tr>
-                            <th>入学年度</th>
-                            <th>姓</th>
-                            <th>名</th>
+                            <th>本名</th>
                             <th>表示名</th>
-                            <th>性別</th>
-                            <th>状態</th>
-                            <th></th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for member in members %}
+                        {% for member in members_by_year[1] %}
                         <tr>
-                                <th>{{ member.year }}</th>
-                                <th>{{ member.family_name }}{{"(" + member.family_kana  + ")"  if member.family_kana  }}</th>
-                                <th>{{ member.first_name }}{{"(" + member.first_kana  + ")"  if member.first_kana  }}</th>
-                                <th>{{ member.show_name }}</th>
-                                <th>
-                                    {% if member.sex == 0 %}
-                                        男
-                                        {% else %}
-                                        女
-                                    {% endif %}
-                                </th>
-                                <th>
-                                    {% if member.visible %}
-                                            表示
-                                    {% else %}
-                                            非表示
-                                    {% endif %}
-                                </th>
-                                <th>
-                                    <form method="get" action="{{url_for('member_edit')}}">
-                                        <input type="hidden" name="method" value="PUT">
-                                        <input type="hidden" name="id" value="{{member.id}}">
-                                        <input type="submit" value="編集"  class="btn btn-warning">
-                                    </form>
-                            </th>
-                                <th>
-                                    <form method="post" action="{{url_for('member_confirm')}}">
-                                            <input type="hidden" name="method" value="DELETE">
-                                            <input type="hidden" name="id" value="{{member.id}}">
-                                            <input type="submit" value="削除"  class="btn btn-danger">
-                                    </form>
-                                </th>
                             <th>
-                                    <a href="{{url_for('member_individual',member_id=member.id)}}" class="btn btn-default">個人ページ</a>
+                                {% if not member.visible %}
+                                <span style="text-decoration-line:line-through; ">
+                                    {% endif %}
+
+                                    <a href="{{url_for('member_individual',member_id=member.id)}}">
+                                        {% if member.sex == 1 %}
+                                        <span style="color: red;">
+                                            {% elif (member.sex < 0 or member.sex > 1) %}
+                                            <span style="color: green;">
+                                                {% else %}
+                                                <span style="color: black;">
+                                                    {% endif %}
+
+                                                    <ruby>{{ member.family_name }}<rp>（</rp>
+                                                        <rt>{{ member.family_kana if member.family_kana  }}</rt>
+                                                        <rp>）</rp>
+                                                    </ruby>
+                                                    <ruby>{{ member.first_name }}<rp>（</rp>
+                                                        <rt>{{ member.first_kana if member.first_kana  }}</rt>
+                                                        <rp>）</rp>
+                                                    </ruby>
+                                                </span>
+                                    </a>
+                                    {% if not member.visible %}
+                                </span>
+                                {% endif %}
+
+                            </th>
+
+                            <th>
+                                {% if not member.visible %}
+                                <span style="text-decoration-line:line-through;">
+                                    {% endif %}
+
+                                    {% if member.sex == 1 %}
+                                    <span style="color: red;">
+                                        {% elif (member.sex < 0 or member.sex > 1) %}
+                                        <span style="color: green;">
+                                            {% else %}
+                                            <span style="color: black;">
+                                                {% endif %}
+
+                                                {{ member.show_name }}
+                                            </span>
+                                            {% if not member.visible %}
+                                        </span>
+                                        {% endif %}
+
+                            </th>
+                            <th>
+                                <form method="get" action="{{url_for('member_edit')}}">
+                                    <input type="hidden" name="method" value="PUT">
+                                    <input type="hidden" name="id" value="{{member.id}}">
+                                    <input type="submit" value="編集" class="btn btn-sm btn-warning">
+                                </form>
+                            </th>
+                            <th>
+                                <form method="post" action="{{url_for('member_confirm')}}">
+                                    <input type="hidden" name="method" value="DELETE">
+                                    <input type="hidden" name="id" value="{{member.id}}">
+                                    <input type="submit" value="削除" class="btn btn-sm btn-danger">
+                                </form>
                             </th>
                         </tr>
-                        {% endfor %}                        
+                        {% endfor %}
                     </tbody>
                 </table>
+                {% endfor %}
             </div>
         </div>
     </div>
