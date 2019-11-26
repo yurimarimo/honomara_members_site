@@ -1,7 +1,7 @@
 from itertools import groupby
 from flask import render_template, request, abort, redirect, url_for, flash
-from honomara_members_site import app, db, bcrypt
-from honomara_members_site.login import user_check, users
+from honomara_members_site import app, db
+from honomara_members_site.login import login_check
 from honomara_members_site.model import Member, Training, After, Restaurant, Race, RaceBase, RaceType, Result
 from honomara_members_site.model import TrainingParticipant
 from sqlalchemy import func
@@ -18,9 +18,9 @@ def index():
 @app.route('/login/', methods=["GET", "POST"])
 def login():
     if(request.method == "POST"):
-        if (request.form["username"] in user_check and
-                bcrypt.check_password_hash(user_check[request.form["username"]]["password"], request.form["password"])):
-            login_user(users.get(user_check[request.form["username"]]["id"]))
+        username = request.form["username"]
+        password = request.form["password"]
+        if login_check(username, password):
             return redirect(url_for('index'))
         else:
             return abort(401)

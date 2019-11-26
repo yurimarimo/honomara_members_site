@@ -1,7 +1,9 @@
-from flask_login import LoginManager, UserMixin
+from flask_login import LoginManager, UserMixin, login_user
 from honomara_members_site import app
 from collections import defaultdict
+from flask_bcrypt import Bcrypt
 
+bcrypt = Bcrypt(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 @login_manager.user_loader
@@ -29,3 +31,12 @@ user_check = nested_dict()
 for i in users.values():
     user_check[i.name]["password"] = i.password
     user_check[i.name]["id"] = i.id
+
+
+def login_check(username, password):
+    if (username in user_check and
+            bcrypt.check_password_hash(user_check[username]["password"], password)):
+        login_user(users.get(user_check[username]["id"]))
+        return True
+    else:
+        return False

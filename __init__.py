@@ -1,8 +1,8 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
-from flask_bcrypt import Bcrypt
 from html import unescape
+import importlib
 
 
 app = Flask(__name__)
@@ -13,7 +13,5 @@ app.jinja_env.globals.update(len=len, int=int, unescape=unescape)
 
 bootstrap = Bootstrap(app)
 db = SQLAlchemy(app)
-bcrypt = Bcrypt(app)
 
-from honomara_members_site import routes
-from honomara_members_site import login
+routes = importlib.import_module('honomara_members_site.routes')
