@@ -4,8 +4,6 @@
 
 {% block styles %}
 {{super()}}
-<link rel="stylesheet"
-      href="{{url_for('.static', filename='css/bootstrap.min.css')}}">
 <style type="text/css">
 body { padding-top: 80px; }
 @media ( min-width: 768px ) {
@@ -59,12 +57,21 @@ body { padding-top: 80px; }
 {% include 'footer.html' %}
 {% block scripts %}
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script src="{{url_for('.static', filename='js/bootstrap.min.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.0/js/bootstrap.min.js"></script>
 
 <script type="text/javascript">
 	$('.bs-component [data-toggle="popover"]').popover();
 	$('.bs-component [data-toggle="tooltip"]').tooltip();
 </script>
 
+
+<link rel="stylesheet"
+      href="">
+    <script type="text/javascript">
+    var delaycss = document.createElement('link');
+    delaycss.rel = 'stylesheet';
+    delaycss.href = "{{url_for('.static', filename='css/bootstrap.min.css')}}";
+    document.head.appendChild(delaycss);
+</script>
 {% endblock %}
 {% endblock %}
