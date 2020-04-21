@@ -10,7 +10,8 @@
             </div>
             <div class="bs-component">
                 {% for members_by_year in groupby(members, key=key) %}
-                <h3>{{members_by_year[0] }}年度入学</h3>
+                <h3 ><a data-toggle="collapse" href=".year_{{members_by_year[0] }}">{{members_by_year[0] }}年度入学</a></h3>
+                <div class="collapse year_{{members_by_year[0] }}">
                 <table class="table table-striped table-hover ">
                     <thead>
                         <tr>
@@ -90,6 +91,7 @@
                         {% endfor %}
                     </tbody>
                 </table>
+                </div>
                 {% endfor %}
             </div>
         </div>
