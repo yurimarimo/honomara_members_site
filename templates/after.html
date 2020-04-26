@@ -46,7 +46,7 @@
                             {{after.date}}
                         </div>
                         <div class="col-xs-8">
-                            @{{ after.restaurant.restaurant_name }}({{ after.restaurant.place }})
+                            @{{ after.restaurant.name }}({{ after.restaurant.place }})
                         </div>
                     </div>
                 </div>
@@ -115,7 +115,7 @@
                         <tr>
                                 <th>{{ after.date }}</th>
                                 <th>{{ after.title }}</th>
-                                <th>{{ after.restaurant.restaurant_name }}({{ after.restaurant.place }})</th>
+                                <th>{{ after.restaurant.name }}({{ after.restaurant.place }})</th>
                                 <th>{{ len(after.participants) }}</th>
                                 <th>{{ after.comment[:15] }}...</th>
                                 {% if current_user.is_authenticated %}

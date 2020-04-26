@@ -17,7 +17,7 @@ weather_list = [('晴れ', '晴れ'), ('曇り', '曇り'), ('雨', '雨'),
                 ('強風', '強風'), ('雪', '雪'), ('その他', 'その他')]
 
 restaurants_choices = [(r.id, "{}({})".format(
-    r.restaurant_name, r.place)) for r in Restaurant.query.order_by(Restaurant.score.desc()).all()]
+    r.name, r.place)) for r in Restaurant.query.order_by(Restaurant.score.desc()).all()]
 
 
 race_base_list_for_form = [(r.race_name, r.race_name)
