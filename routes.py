@@ -24,9 +24,11 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
         if login_check(username, password):
+            flash('ログインしました', 'success')
             return redirect(url_for('index'))
         else:
-            return abort(401)
+            flash('username または password が正しくありません', 'danger')
+            return render_template("login.html")
     else:
         return render_template("login.html")
 
@@ -35,6 +37,7 @@ def login():
 @login_required
 def logout():
     logout_user()
+    flash('ログアウトしました', 'success')
     return redirect(url_for('index'))
 
 
