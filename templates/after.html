@@ -59,7 +59,7 @@
                         <dt>参加者 ( {{ len(after.participants) }} ) </dt>
                         <dd>
                             {% for m in after.participants %}
-                            <span {% if m.sex == 1 %} style="color: red;" {% endif %}>
+                            <span {% if m.sex == 1 or m.sex == 'female' %} style="color: red;" {% endif %}>
                                 {{ m.show_name }}
                             </span>
                             {% endfor %}

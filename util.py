@@ -3,7 +3,10 @@ from datetime import date, datetime
 from locale import setlocale, LC_TIME
 
 
-setlocale(LC_TIME, 'ja_JP.UTF-8')  # for get_wday
+try:
+    setlocale(LC_TIME, 'ja_JP.UTF-8')  # for get_wday
+except Exception as e:
+    pass
 
 
 def render(template, **args):

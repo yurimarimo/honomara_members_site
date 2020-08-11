@@ -29,7 +29,7 @@
                         <dt>天気</dt>
                         <dd>{{form.weather.data}}{{form.weather.data}}</dd>
                         <dt>場所</dt>
-                        <dd>{{form.place.data}}</dd>
+                        <dd>{{form.type.data}}</dd>
                         <dt>タイトル</dt>
                         <dd>{{form.title.data}}</dd>
                         <dt>コメント</dt>
@@ -48,7 +48,7 @@
             <input type="hidden" name="date" value="{{ form.date.data }}">
             <input type="hidden" name="weather" value="{{ form.weather.data }}">
             <input type="hidden" name="title" value="{{ form.title.data }}">
-            <input type="hidden" name="place" value="{{ form.place.data }}">
+            <input type="hidden" name="type" value="{{ form.type.data }}">
             <input type="hidden" name="comment" value="{{ form.comment.data }}">
             <input type="hidden" name="method" value="{{ form.method.data }}">
             <input type="hidden" name="confirmed" value="True">
