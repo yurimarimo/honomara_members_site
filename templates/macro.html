@@ -1,0 +1,115 @@
+{% macro input(name, value='', type='text', size=20) -%}
+<input type="{{ type }}" name="{{ name }}" value="{{
+value|e }}" size="{{ size }}">
+{%- endmacro %}
+
+{% macro after(after, current_user) -%}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="row">
+      <div class="bs-component">
+        <div class="col-xs-4">
+          {{after.date}}
+        </div>
+        <div class="col-xs-8">
+          @{{ after.restaurant.name }}({{ after.restaurant.place }})
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel-body">
+    <div class="bs-component">
+      <dl>
+        <dt> <b> {{unescape(after.title)}} </b> </dt>
+        <dd>{{unescape(after.comment)}}</dd>
+        <dt>参加者 <span class="badge">{{ after.participants | length }}人</span> </dt>
+        <dd>
+        {% for m in after.participants %}
+        <span {% if m.sex == 1 or m.sex == 'female' %} style="color: red;" {% endif %}>
+          {{ m.show_name }}
+        </span>
+        {% endfor %}
+        </dd>
+      </dl>
+    </div>
+    {% if current_user.is_authenticated %}
+    <div class="row">
+      <div class="bs-component">
+        <div class="col-xs-12">
+          <div style="display:inline-block;">
+            <form method="get" action="{{url_for('after_edit')}}">
+              <input type="hidden" name="method" value="PUT">
+              <input type="hidden" name="id" value="{{after.id}}">
+              <input type="submit" value="編集" class="btn btn-sm btn-warning">
+            </form>
+          </div>
+          <div style="display:inline-block;">
+            <form method="post" action="{{url_for('after_confirm')}}">
+              <input type="hidden" name="method" value="DELETE">
+              <input type="hidden" name="id" value="{{after.id}}">
+              <input type="submit" value="削除" class="btn btn-sm btn-danger">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{%- endmacro %}
+
+{% macro training(training,current_user) -%}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="row">
+      <div class="bs-component">
+        <div class="col-xs-6">
+          <!-- {{training.weather}} -->
+          {{training.date}}
+        </div>
+        <div class="col-xs-6">
+          @{{training.type}}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel-body">
+    <div class="bs-component">
+      <dl>
+        <dt> <b> {{unescape(training.title)}} </b></dt>
+        <dd>{{unescape(training.comment)}}</dd>
+        <dt>参加者<span class="badge">{{ after.participants | length }}人</span></dt>
+        <dd>
+        {% for m in training.participants %}
+        <span {% if m.sex == 1 or m.sex=='female' %} style="color: red;" {% endif %}>
+          {{ m.show_name }}
+        </span>
+        {% endfor %}
+        </dd>
+      </dl>
+    </div>
+    {% if current_user.is_authenticated %}
+    <div class="row">
+      <div class="bs-component">
+        <div class="col-xs-12">
+          <div style="display:inline-block;">
+            <form method="get" action="{{url_for('training_edit')}}">
+              <input type="hidden" name="method" value="PUT">
+              <input type="hidden" name="id" value="{{training.id}}">
+              <input type="submit" value="編集" class="btn btn-sm btn-warning">
+            </form>
+          </div>
+          <div style="display:inline-block;">
+            <form method="post" action="{{url_for('training_confirm')}}">
+              <input type="hidden" name="method" value="DELETE">
+              <input type="hidden" name="id" value="{{training.id}}">
+              <input type="submit" value="削除" class="btn btn-sm btn-danger">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{%- endmacro %}
