@@ -15,22 +15,22 @@
           <li><a href="{{url_for('training')}}">練習録</a></li>
           <li><a href="{{url_for('after')}}">アフター録</a></li>
           <li><a href="{{url_for('result')}}">大会記録</a></li>
-          <li><a href="{{url_for('ranking')}}">ランキング</a></li>
-          <li><a href="{{url_for('search')}}">検索</a></li>
-          <!-- <li class="dropdown active">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">link1<span class="caret"></span></a>
+          {% if current_user.is_authenticated %}
+          <li class="dropdown active">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">その他<span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
-            <li><a href="#">link1.1</a></li>
-            <li><a href="#">link1.2</a></li>
+              <li><a href="{{url_for('competition')}}">大会一覧</a></li>
+              <li><a href="{{url_for('restaurant')}}">アフター店舗一覧</a></li>
+              <li><a href="{{url_for('member')}}">メンバーリスト</a></li>
+              <li><a href="{{url_for('ranking')}}">ランキング</a></li>
+              <li><a href="{{url_for('search')}}">検索</a></li>
             </ul>
-            </li> -->
-            {% if not current_user.is_authenticated %}
-            <li><a href="{{url_for('login')}}">ログイン</a></li>
-            {% else %}
-            <li><a href="{{url_for('member')}}">メンバーリスト</a></li>
-            <!-- <li><a href="{{url_for('logout')}}">ログアウト</a> -->
-            <li><a data-toggle="modal" data-target="#delete_modal">ログアウト</a></li>
-            {% endif %}
+          </li>
+          <!-- <li><a href="{{url_for('logout')}}">ログアウト</a> -->
+          <li><a data-toggle="modal" data-target="#delete_modal">ログアウト</a></li>
+          {% else %}
+          <li><a href="{{url_for('login')}}">ログイン</a></li>
+          {% endif %}
         </ul>
       </div>
     </div>
