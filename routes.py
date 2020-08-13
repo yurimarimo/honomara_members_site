@@ -827,20 +827,25 @@ def result_confirm():
 
 @ app.route('/ranking')
 def ranking():
-    q1 = db.session.query(Member.show_name, func.count(TrainingParticipant.training_id).label('cnt'), Member.sex).join(
-        TrainingParticipant, TrainingParticipant.member_id == Member.id).group_by(TrainingParticipant.member_id)
+    query = db.session.query(Member.show_name, func.count(TrainingParticipant.training_id).label('cnt'), Member.sex).join(
+        TrainingParticipant, TrainingParticipant.member_id == Member.id).join(Training, TrainingParticipant.training_id == Training.id)
     year_list = request.args.getlist('year_list')
-    app.logger.info(year_list)
+    app.logger.info(request.form)
+
+    begin = request.args.get("begin") or datetime(1990, 1, 1)
+    end = request.args.get("end") or datetime.today()
+    query = query.filter(Training.date >= begin) if begin else query
+    query = query.filter(Training.date <= end)
+    query = query.group_by(TrainingParticipant.member_id)
+    items = []
     if year_list:
-        q2 = q1.filter(Member.year.in_(year_list))
-    else:
-        q2 = q1
+        query = query.filter(Member.year.in_(year_list))
+        items = [{'rank': i + 1, 'show_name': d[0], 't_cnt': d[1], 'sex': d[2]}
+                 for i, d in enumerate(query.order_by(db.text('cnt DESC')).all())
+                 ]
+    year_list = map(lambda x: int(x), year_list)
 
-    items = [{'rank': i + 1, 'show_name': d[0], 't_cnt': d[1], 'sex': d[2]}
-             for i, d in enumerate(q2.order_by(db.text('cnt DESC')).all())
-             ]
-
-    return render_template('ranking.html', items=items, years=range(current_school_year, 1990, -1))
+    return render_template('ranking.html', items=items, begin=begin, end=end, year_list=year_list, years=range(current_school_year, 1990, -1))
 
 
 @ app.route('/search/')
