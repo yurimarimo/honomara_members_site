@@ -2,21 +2,31 @@
 
 {% block content %}
 <div class="container">
-    <h1>{{competition.name}} </h1>
-    <div class="bs-component">
-        <div class="row">
-          <h2>コース情報</h2>
-          Comming soon...
-        </div>
-        <div class="row">
-          <h2>過去参加状況</h2>
-          Comming soon...
-        </div>
-        <div class="row">
-          <h2>歴代記録</h2>
-          Comming soon...
-        </div>
+  <h1>{{competition.name}} </h1>
+  <div class="bs-component">
+    <div class="row">
+      <h2>コース情報</h2>
+      <ul>
+        {% for course in competition.courses %}
+        <li>{{course.show_name if course.show_name else "{}km".format(course.distance)}}</li>
+        {% endfor %}
+      </ul>
     </div>
+    <div class="row">
+      <h2>過去参加状況</h2>
+      <ul>
+        {% for course in competition.courses %}
+        {% for race in course.races %}
+        <li>{{course.show_name if course.show_name else "{}km".format(course.distance)}} {{race.date}} ({{len(race.results)}}人)</li>
+        {% endfor %}
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="row">
+      <h2>歴代記録</h2>
+      Comming soon...
+    </div>
+  </div>
 </div>
 
 {% endblock %}
