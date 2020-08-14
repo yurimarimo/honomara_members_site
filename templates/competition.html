@@ -28,9 +28,9 @@
               <td><a href="{{url_for('competition_individual',competition_id=competition.id)}}">
                   {{competition.name}}
                 </a></td>
-                <td>{{competition.kana}}</td>
-                <td>{{competition.show_name}}</td>
-                <td>{{competition.place}}</td>
+                <td>{{competition.kana|default("<未入力>", true)}}</td>
+                <td>{{competition.show_name|default("<未入力>", true)}}</td>
+                <td>{{competition.place|default("<未入力>", true)}}</td>
                 {% if current_user.is_authenticated %}
                 <td>
                   <form method="get" action="{{url_for('competition_edit')}}">
