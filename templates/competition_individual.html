@@ -8,7 +8,7 @@
       <h2>コース情報</h2>
       <ul>
         {% for course in competition.courses %}
-        <li>{{course.show_name if course.show_name else "{}km".format(course.distance)}}</li>
+        <li>{{course|fmt_course(long=True)}}</li>
         {% endfor %}
       </ul>
     </div>
@@ -17,7 +17,7 @@
       <ul>
         {% for course in competition.courses %}
         {% for race in course.races %}
-        <li>{{course.show_name if course.show_name else "{}km".format(course.distance)}} {{race.date}} ({{len(race.results)}}人)</li>
+        <li>{{course|fmt_course}} {{race.date}} ({{len(race.results)}}人)</li>
         {% endfor %}
         {% endfor %}
       </ul>

@@ -43,7 +43,7 @@
             <div class="panel-heading">
               <div class="row" style="margin-top: 0;">
                 <h4 class="col-xs-12 col-sm-7" style="padding: 0 10px; margin: 0px;">
-                  {{ race.date }} {{ race.course.competition.name }}  {{ race.course.show_name if race.course.show_name else "{}km".format(race.course.distance) }}
+                  {{ race.date }} {{ race.course.competition.name }}  {{ race.course | fmt_course }}
 
                 </h4>
                 {% if current_user.is_authenticated %}
@@ -84,8 +84,9 @@
                   {% endfor %}
                 </p>
                 <p style="font-size: 1.2em; margin-bottom: 3px;" class="col-xs-4 col-sm-2 col-lg-2 ">
-                  {{"{:02}:{:02}:{:02}".format(int(result.time)//3600000,
-                  (int(result.time)%3600000)//60000,(int(result.time)%60000)//1000)}}
+                  <!-- {{"{:02}:{:02}:{:02}".format(int(result.time)//3600000,
+                  (int(result.time)%3600000)//60000,(int(result.time)%60000)//1000)}} -->
+                  {{result.time|fmt_time}}
                   <br>
                 </p>
                 {% if result.comment and len(result.comment) > 0 %}

@@ -16,4 +16,5 @@ app.jinja_env.globals.update(len=len, int=int, unescape=unescape)
 bootstrap = Bootstrap(app)
 db = SQLAlchemy(app)
 
+filters = importlib.import_module('honomara_members_site.filters')
 routes = importlib.import_module('honomara_members_site.routes')
