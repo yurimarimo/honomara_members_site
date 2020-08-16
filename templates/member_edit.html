@@ -42,3 +42,21 @@
   </form>
 </div>
 {% endblock %}
+
+
+{% block scripts%}
+{{super()}}
+<script src="{{url_for('.static',filename='js/jquery.autoKana.js')}}"></script>
+<script type="text/javascript">
+  $(document).ready(
+    function() {
+      $.fn.autoKana('#family_name', '#family_kana', {
+        katakana : true  //true：カタカナ、false：ひらがな（デフォルト）
+      });
+      $.fn.autoKana('#first_name', '#first_kana', {
+        katakana : true
+      });
+    }
+  );
+</script>
+{% endblock %}

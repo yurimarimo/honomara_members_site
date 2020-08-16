@@ -17,3 +17,16 @@
   </div>
 </div>
 {% endblock %}
+{% block scripts%}
+{{super()}}
+<script src="{{url_for('.static',filename='js/jquery.autoKana.js')}}"></script>
+<script type="text/javascript">
+  $(document).ready(
+    function() {
+      $.fn.autoKana('#name', '#kana', {
+        katakana : true  //true：カタカナ、false：ひらがな（デフォルト）
+      });
+    }
+  );
+</script>
+{% endblock %}
