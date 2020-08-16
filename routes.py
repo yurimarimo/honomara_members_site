@@ -9,7 +9,7 @@ from sqlalchemy import func
 from sqlalchemy.sql import text
 from honomara_members_site.form import *
 from flask_login import login_required, login_user, logout_user
-from honomara_members_site.util import *
+from honomara_members_site.util import validate_course_and_set_name, form_set_time
 
 
 @app.route('/')
@@ -832,8 +832,8 @@ def ranking():
     year_list = request.args.getlist('year_list')
     app.logger.info(request.form)
 
-    begin = request.args.get("begin") or datetime(1990, 1, 1)
-    end = request.args.get("end") or datetime.today()
+    begin = request.args.get("begin") or datetime.datetime(1990, 1, 1)
+    end = request.args.get("end") or datetime.datetime.today()
     query = query.filter(Training.date >= begin) if begin else query
     query = query.filter(Training.date <= end)
     query = query.group_by(TrainingParticipant.member_id)

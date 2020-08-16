@@ -1,5 +1,5 @@
 from flask import render_template as flask_render_template
-from datetime import date, datetime
+import datetime
 from locale import setlocale, LC_TIME
 from honomara_members_site import app, db
 
@@ -27,11 +27,11 @@ def get_school_year(date):
 
 
 def str_to_date(str):
-    return datetime.strptime(str, '%Y-%m-%d').date()
+    return datetime.datetime.strptime(str, '%Y-%m-%d').date()
 
 
 def get_wday(date):
-    return date.strftime('%a')
+    return datetime.date.strftime('%a')
 
 
 def validate_course_and_set_name(form=None):
@@ -97,4 +97,4 @@ def form_set_time(form=None):
         form.time_h.data = tmp
 
 
-current_school_year = get_school_year(date.today())
+current_school_year = get_school_year(datetime.date.today())
