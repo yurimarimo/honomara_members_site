@@ -78,7 +78,7 @@ value|e }}" size="{{ size }}">
       <dl>
         <dt> <b> {{unescape(training.title)}} </b></dt>
         <dd>{{unescape(training.comment)}}</dd>
-        <dt>参加者<span class="badge">{{ after.participants | length }}人</span></dt>
+        <dt>参加者<span class="badge">{{ training.participants | length }}人</span></dt>
         <dd>
         {% for m in training.participants %}
         <span {% if m.sex == 1 or m.sex=='female' %} style="color: red;" {% endif %}>
