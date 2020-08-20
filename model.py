@@ -1,4 +1,5 @@
 from honomara_members_site import db
+from sqlalchemy.sql.functions import current_timestamp
 
 
 class Member(db.Model):
@@ -14,7 +15,10 @@ class Member(db.Model):
     year = db.Column(db.Integer, nullable=False)
     sex = db.Column(db.Integer, nullable=False)
     visible = db.Column(db.Boolean, nullable=False)
-
+    created_at = db.Column(db.DateTime, nullable=False,
+                           server_default=current_timestamp())
+    updated_at = db.Column(db.DateTime, nullable=False, server_default=db.text(
+        'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
 #     results = db.relationship('Result') # created by backref
 
     def __repr__(self):
@@ -37,6 +41,10 @@ class TrainingParticipant(db.Model):
         'member.id'), primary_key=True)
     training_id = db.Column(db.Integer, db.ForeignKey(
         'training.id'), primary_key=True)
+    created_at = db.Column(db.DateTime, nullable=False,
+                           server_default=current_timestamp())
+    updated_at = db.Column(db.DateTime, nullable=False, server_default=db.text(
+        'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
 
     def __repr__(self):
         return "<TrainingParticipant(training_id:{}, member_id:{})>".\
@@ -52,6 +60,10 @@ class Training(db.Model):
     weather = db.Column(db.String(30), nullable=False)
     title = db.Column(db.String(100), nullable=False)
     comment = db.Column(db.Text)
+    created_at = db.Column(db.DateTime, nullable=False,
+                           server_default=current_timestamp())
+    updated_at = db.Column(db.DateTime, nullable=False, server_default=db.text(
+        'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
 
     participants = db.relationship(
         'Member',
@@ -71,6 +83,10 @@ class AfterParticipant(db.Model):
         'member.id'), primary_key=True)
     after_id = db.Column(db.Integer, db.ForeignKey(
         'after.id'), primary_key=True)
+    created_at = db.Column(db.DateTime, nullable=False,
+                           server_default=current_timestamp())
+    updated_at = db.Column(db.DateTime, nullable=False, server_default=db.text(
+        'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
 
     def __repr__(self):
         return "<AfterParticipant(after_id:{}, member_id:{})>".\
@@ -84,6 +100,10 @@ class Restaurant(db.Model):
     place = db.Column(db.String(20))
     score = db.Column(db.Float, server_default=db.text('0'))
     comment = db.Column(db.Text)
+    created_at = db.Column(db.DateTime, nullable=False,
+                           server_default=current_timestamp())
+    updated_at = db.Column(db.DateTime, nullable=False, server_default=db.text(
+        'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
 
     def __repr__(self):
         return "<Restaurant(id:{}, name:{}, plase:{})>".\
@@ -101,6 +121,10 @@ class After(db.Model):
         'restaurant.id'), nullable=False)
     title = db.Column(db.String(128), nullable=False)
     comment = db.Column(db.Text)
+    created_at = db.Column(db.DateTime, nullable=False,
+                           server_default=current_timestamp())
+    updated_at = db.Column(db.DateTime, nullable=False, server_default=db.text(
+        'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
     restaurant = db.relationship('Restaurant')
 
     participants = db.relationship(
@@ -129,6 +153,10 @@ class Competition(db.Model):
     show_name = db.Column(db.String(30))
     place = db.Column(db.String(30))
     comment = db.Column(db.Text)
+    created_at = db.Column(db.DateTime, nullable=False,
+                           server_default=current_timestamp())
+    updated_at = db.Column(db.DateTime, nullable=False, server_default=db.text(
+        'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
     courses = db.relationship("Course")
 
     def __repr__(self):
@@ -147,6 +175,10 @@ class Course(db.Model):
     distance = db.Column(db.Float)
     elevation = db.Column(db.Integer)
     comment = db.Column(db.Text)
+    created_at = db.Column(db.DateTime, nullable=False,
+                           server_default=current_timestamp())
+    updated_at = db.Column(db.DateTime, nullable=False, server_default=db.text(
+        'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
 
     races = db.relationship("Race")
 
@@ -167,6 +199,10 @@ class Race(db.Model):
 #                               )
     results = db.relationship('Result')
     comment = db.Column(db.Text)
+    created_at = db.Column(db.DateTime, nullable=False,
+                           server_default=current_timestamp())
+    updated_at = db.Column(db.DateTime, nullable=False, server_default=db.text(
+        'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
 
     def __repr__(self):
         return "<Race(id:{}, {}, date {:%Y-%m-%d})>".format(self.id, self.course, self.date)
@@ -179,6 +215,10 @@ class RaceParticipant(db.Model):
         'member.id'), primary_key=True)
     result_id = db.Column(db.Integer, db.ForeignKey(
         'result.id'), primary_key=True)
+    created_at = db.Column(db.DateTime, nullable=False,
+                           server_default=current_timestamp())
+    updated_at = db.Column(db.DateTime, nullable=False, server_default=db.text(
+        'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
 
     def __repr__(self):
         return "<RaceParticipant(result_id:{}, member_id:{})>".format(self.result_id, self.member_id)
@@ -193,6 +233,10 @@ class Result(db.Model):
     time = db.Column(db.Integer)
     distance = db.Column(db.Float)
     comment = db.Column(db.Text)
+    created_at = db.Column(db.DateTime, nullable=False,
+                           server_default=current_timestamp())
+    updated_at = db.Column(db.DateTime, nullable=False, server_default=db.text(
+        'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
 
     participants = db.relationship(
         'Member',
