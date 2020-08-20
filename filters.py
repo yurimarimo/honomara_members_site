@@ -33,6 +33,8 @@ def fmt_course(course, long=False):
 
 
 def fmt_time(time, long=False):
+    if time is None:
+        return "未入力"
     ms = time % 1000
     time //= 1000
     s = time % 60
