@@ -1,7 +1,7 @@
 {% extends "edit_template.html" %}
 {% block content %}
 <div class="container">
-  大会登録ページ
+  大会{{"編集" if form.id.data else "登録" }}ページ
   <div class="row">
     <div class="col-lg-8 col-lg-offset-2 col-sm-12">
       <form action="{{url_for('competition_edit')}}" class="form" method="post" role="form">

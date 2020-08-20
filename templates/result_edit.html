@@ -1,7 +1,7 @@
 {% extends "edit_template.html" %}
 {% block content %}
 <div class="container">
-<h1>記録登録:結果＆走者登録<h1>
+<h1>記録{{"編集" if form.id.data else "登録" }}:結果＆走者登録<h1>
 <div class="row">
 <div class="col-lg-8 col-lg-offset-2 col-sm-12">
 <h2>{{ competition.name }}  {{ course.distance }}km {{form.date.data}}</h2>
