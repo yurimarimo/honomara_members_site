@@ -943,3 +943,8 @@ def restaurant_confirm():
             restaurant = Restaurant.query.get(form.id.data)
             form = RestaurantForm(obj=restaurant)
         return render_template('restaurant_confirm.html', form=form)
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('template_message.html', message='指定されたページは存在しません'), 404
