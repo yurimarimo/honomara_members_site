@@ -1,8 +1,14 @@
+<style>
+  svg{
+    margin-right: 5px;
+  }
+</style>
+
 <header>
   <div class="navbar navbar-default navbar-static-top">
     <div class="container">
       <div class="navbar-header">
-        <a href="{{url_for('index')}}" class="navbar-brand" style="margin-right: 0;">ホノマラメンバーズページ</a>
+        <a href="{{url_for('index')}}" class="navbar-brand" style="margin-right: 0;">ホノマラメンバーズサイト</a>
         <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main" style="padding: 9px;">
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
@@ -11,25 +17,23 @@
       </div>
       <div class="navbar-collapse collapse" id="navbar-main">
         <ul class="nav navbar-nav">
-          <!-- <li><a href="{{url_for('index')}}">トップ</a></li> -->
-          <li><a href="{{url_for('training')}}">練習録</a></li>
-          <li><a href="{{url_for('after')}}">アフター録</a></li>
-          <li><a href="{{url_for('result')}}">大会記録</a></li>
+          <li><a href="{{url_for('training')}}"><i class="fas fa-running"></i>練習録</a></li>
+          <li><a href="{{url_for('after')}}"><i class="fas fa-utensils"></i>アフター録</a></li>
+          <li><a href="{{url_for('result')}}"><i class="fas fa-medal"></i>大会記録</a></li>
+          <li><a href="{{url_for('ranking')}}"><i class="fas fa-trophy"></i>ランキング</a></li>
+          <li><a href="{{url_for('search')}}"><i class="fas fa-search"></i>検索</a></li>
           {% if current_user.is_authenticated %}
           <li class="dropdown active">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">その他<span class="caret"></span></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fas fa-folder"></i>その他<span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
               <li><a href="{{url_for('competition')}}">大会一覧</a></li>
               <li><a href="{{url_for('restaurant')}}">アフター店舗一覧</a></li>
-              <li><a href="{{url_for('member')}}">メンバーリスト</a></li>
-              <li><a href="{{url_for('ranking')}}">ランキング</a></li>
-              <li><a href="{{url_for('search')}}">検索</a></li>
+              <li><a href="{{url_for('member')}}">メンバー一覧</a></li>
             </ul>
           </li>
-          <!-- <li><a href="{{url_for('logout')}}">ログアウト</a> -->
-          <li><a data-toggle="modal" data-target="#delete_modal">ログアウト</a></li>
+          <li><a data-toggle="modal" data-target="#delete_modal"><i class="fas fa-sign-out-alt"></i>ログアウト</a></li>
           {% else %}
-          <li><a href="{{url_for('login')}}">ログイン</a></li>
+          <li><a href="{{url_for('login')}}"><i class="fas fa-sign-in-alt"></i>ログイン</a></li>
           {% endif %}
         </ul>
       </div>

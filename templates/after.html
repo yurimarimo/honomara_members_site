@@ -33,15 +33,17 @@
         </h1>
         <div class="bs-component">
           <ul class="pager">
-            <li class="previous {{ "disabled" if not pagination.has_prev}}"><a href="{{url_for('after',page=pagination.prev_num) }}">&larr; Newer</a></li>
-            <li>                {{ pagination.page}}/{{ pagination.pages}}                            </li>
-            <li class="next  {{ "disabled" if not pagination.has_next}}"><a href="{{url_for('after',page=pagination.next_num) }}">Older &rarr;</a></li>
+            <li class="previous {{ "disabled" if not pagination.has_prev}}"><a
+              href="{{url_for('after',page=pagination.prev_num) }}">&larr; Newer</a></li>
+            <li>{{ pagination.page }}/{{ pagination.pages }}</li>
+            <li class="next  {{ "disabled" if not pagination.has_next}}"><a
+              href="{{url_for('after',page=pagination.next_num) }}">Older &rarr;</a></li>
           </ul>
         </div>
       </div>
       <div class="row row-eq-height">
         {% for after in pagination.items %}
-        <div class="col-xs-12 col-sm-6 col-lg-4 col-lg-3">
+        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
           {{ macro.after(after,current_user) }}
         </div>
         {% endfor %}
@@ -49,9 +51,11 @@
       <div class="bs-component">
         <div class="bs-component">
           <ul class="pager">
-            <li class="previous {{ "disabled" if not pagination.has_prev}}"><a href="{{url_for('after',page=pagination.prev_num) }}">&larr; Newer</a></li>
-            <li>                {{ pagination.page}}/{{ pagination.pages}}                            </li>
-            <li class="next  {{ "disabled" if not pagination.has_next}}"><a href="{{url_for('after',page=pagination.next_num) }}">Older &rarr;</a></li>
+            <li class="previous {{ "disabled" if not pagination.has_prev}}"><a
+              href="{{url_for('after',page=pagination.prev_num) }}">&larr; Newer</a></li>
+            <li>{{ pagination.page }}/{{ pagination.pages }}</li>
+            <li class="next  {{ "disabled" if not pagination.has_next}}"><a
+              href="{{url_for('after',page=pagination.next_num) }}">Older &rarr;</a></li>
           </ul>
         </div>
       </div>
