@@ -87,9 +87,10 @@ def member_individual(member_id):
 
     afterdays = afters.distinct(After.date).all()
     afters = afters.all()
-
-    first_training = trainings[0][1].strftime('%Y/%m/%d')
-    first_after = afters[0][1].strftime('%Y/%m/%d')
+    first_training = trainings[0].date.strftime(
+        '%Y/%m/%d') if len(trainings) > 0 else '未参加'
+    first_after = afters[0].date.strftime(
+        '%Y/%m/%d') if len(afters) > 0 else '未参加'
     count_trainings = len(trainings)
     count_afters = len(afters)
     count_afterdays = len(afterdays)
