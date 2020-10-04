@@ -10,7 +10,7 @@
         <div class="row">
         <input type="hidden" name="competition_id" value="{{ form.competition_id.data }}">
         <input type="hidden" name="course_id" value="{{ form.course_id.data }}">
-        <input type="hidden" name="race_id" value="{{ form.race_id.data }}">
+        <input type="hidden" name="race_id" value="{{form.race_id.data|default('', true)}}">
         <input type="hidden" name="date" value="{{ form.date.data }}">
         <div class="form-group  required">{{ form.participants.label(class="control-label") }} {{form.participants(class="form-control")}}</div>
         <div class="row">

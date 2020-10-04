@@ -167,7 +167,7 @@ class ResultAllForm(FlaskForm):
     course_id = SelectField('コース:', coerce=int, validators=[
         InputRequired()], default=None)
     date = DateField('大会日程:', validators=[])
-    race_id = IntegerField(validators=[InputRequired()], default=None)
+    race_id = IntegerField(validators=[Optional()])
     participants = SelectMultipleField('参加者:', coerce=int, validators=[InputRequired()],
                                        choices=visible_member_list_for_form)
     distance = FloatField('記録(距離km)', validators=[Optional()], default=0)

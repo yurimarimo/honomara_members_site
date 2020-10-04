@@ -784,7 +784,7 @@ def result_confirm():
                     race = race[0]
                 elif len(race) == 0:
                     race = Race()
-                    race.course_id = form.course.data
+                    race.course_id = form.course_id.data
                     race.date = form.date.data
                     db.session.add(race)
                     race = Race.query.filter(Race.course_id == race.course_id).filter(
