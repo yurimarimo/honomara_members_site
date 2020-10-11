@@ -31,7 +31,8 @@ class Member(db.Model):
         fields['sex'] = self.sex
 
         fields['visible'] = self.visible
-        return "<Member('{id}','{family_name}', '{first_name}', '{show_name}', {year}, {sex}, {visible})>".format(**fields)
+        return "<Member('{id}','{family_name}', '{first_name}', '{show_name}', {year}, {sex}, {visible})>".format(
+            **fields)
 
 
 class TrainingParticipant(db.Model):
@@ -134,7 +135,8 @@ class After(db.Model):
     )
 
     def __repr__(self):
-        #         return "<After(id:{}, {:%Y-%m-%d}, title:'{}')>".format(self.id, self.date, self.title)
+        # return "<After(id:{}, {:%Y-%m-%d}, title:'{}')>".format(self.id,
+        # self.date, self.title)
         tmp = 'id:{}'.format(self.id)
         if self.date:
             tmp += ', {:%Y-%m-%d}'.format(self.date)
@@ -160,7 +162,8 @@ class Competition(db.Model):
     courses = db.relationship("Course")
 
     def __repr__(self):
-        return "<Competition(id:{}, name:{}, place:{}, comment:'{}')>".format(self.id, self.name, self.place, self.comment)
+        return "<Competition(id:{}, name:{}, place:{}, comment:'{}')>".format(
+            self.id, self.name, self.place, self.comment)
 
 
 class Course(db.Model):
@@ -183,7 +186,8 @@ class Course(db.Model):
     races = db.relationship("Race")
 
     def __repr__(self):
-        return "<Course(id:{}, 大会:{}, 距離:{}km)>".format(self.id, self.competition.name, self.distance)
+        return "<Course(id:{}, 大会:{}, 距離:{}km)>".format(
+            self.id, self.competition.name, self.distance)
 
 
 class Race(db.Model):
@@ -205,7 +209,8 @@ class Race(db.Model):
         'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
 
     def __repr__(self):
-        return "<Race(id:{}, {}, date {:%Y-%m-%d})>".format(self.id, self.course, self.date)
+        return "<Race(id:{}, {}, date {:%Y-%m-%d})>".format(self.id,
+                                                            self.course, self.date)
 
 
 class RaceParticipant(db.Model):
@@ -221,7 +226,8 @@ class RaceParticipant(db.Model):
         'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
 
     def __repr__(self):
-        return "<RaceParticipant(result_id:{}, member_id:{})>".format(self.result_id, self.member_id)
+        return "<RaceParticipant(result_id:{}, member_id:{})>".format(
+            self.result_id, self.member_id)
 
 
 class Result(db.Model):
