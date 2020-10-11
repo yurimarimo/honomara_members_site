@@ -1,65 +1,69 @@
 {% extends "template.html" %}
 {% import 'macro.html' as macro %}
 {% block styles %}
-{{ super() }}
-<style>
+    {{ super() }}
+    <style>
 
-.row-eq-height {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  flex-wrap: wrap;
-}
+        .row-eq-height {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            flex-wrap: wrap;
+        }
 
-.panel {
-    height: 95%;
-}
+        .panel {
+            height: 95%;
+        }
 
-.btn-sm {
-  margin: 2px 6px;
-}
-</style>
+        .btn-sm {
+            margin: 2px 6px;
+        }
+    </style>
 {% endblock %}
 {% block content %}
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-lg-12">
-      <div class="page-header">
-        <h1 id="tables">アフター録
-          {% if current_user.is_authenticated %}
-          <a href="{{url_for('after_edit')}}" class="btn btn-primary">新規登録</a>
-          {% endif %}
-        </h1>
-        <div class="bs-component">
-          <ul class="pager">
-            <li class="previous {{ "disabled" if not pagination.has_prev}}"><a
-              href="{{url_for('after',page=pagination.prev_num) }}">&larr; Newer</a></li>
-            <li>{{ pagination.page }}/{{ pagination.pages }}</li>
-            <li class="next  {{ "disabled" if not pagination.has_next}}"><a
-              href="{{url_for('after',page=pagination.next_num) }}">Older &rarr;</a></li>
-          </ul>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="page-header">
+                    <h1 id="tables">アフター録
+                        {% if current_user.is_authenticated %}
+                            <a href="{{url_for('after_edit')}}" class="btn btn-primary">新規登録</a>
+                        {% endif %}
+                    </h1>
+                    <div class="bs-component">
+                        <ul class="pager">
+                            <li class="previous {{ " disabled" if not pagination.has_prev}}"="disabled" if not pagination.has_prev}}"">
+                                <a href="{{url_for('after',page=pagination.prev_num) }}">&larr; Newer</a>
+                            </li>
+                            <li>{{ pagination.page }}/{{ pagination.pages }}</li>
+                            <li class="next  {{ " disabled" if not pagination.has_next}}"="disabled" if not pagination.has_next}}"">
+                                <a href="{{url_for('after',page=pagination.next_num) }}">Older &rarr;</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row row-eq-height">
+                    {% for after in pagination.items %}
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                            {{ macro.after(after,current_user) }}
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="bs-component">
+                    <div class="bs-component">
+                        <ul class="pager">
+                            <li class="previous {{ " disabled" if not pagination.has_prev}}"="disabled" if not pagination.has_prev}}"">
+                                <a href="{{url_for('after',page=pagination.prev_num) }}">&larr; Newer</a>
+                            </li>
+                            <li>{{ pagination.page }}/{{ pagination.pages }}</li>
+                            <li class="next  {{ " disabled" if not pagination.has_next}}"="disabled" if not pagination.has_next}}"">
+                                <a href="{{url_for('after',page=pagination.next_num) }}">Older &rarr;</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="row row-eq-height">
-        {% for after in pagination.items %}
-        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-          {{ macro.after(after,current_user) }}
-        </div>
-        {% endfor %}
-      </div>
-      <div class="bs-component">
-        <div class="bs-component">
-          <ul class="pager">
-            <li class="previous {{ "disabled" if not pagination.has_prev}}"><a
-              href="{{url_for('after',page=pagination.prev_num) }}">&larr; Newer</a></li>
-            <li>{{ pagination.page }}/{{ pagination.pages }}</li>
-            <li class="next  {{ "disabled" if not pagination.has_next}}"><a
-              href="{{url_for('after',page=pagination.next_num) }}">Older &rarr;</a></li>
-          </ul>
-        </div>
-      </div>
     </div>
-  </div>
-</div>
 {% endblock %}
