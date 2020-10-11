@@ -2,4 +2,4 @@ HTML:
   beautifiers: ["Pretty Diff"]
   indent_char: " "
   indent_size: 4
-  wrap_line_length": "auto"
+  wrap_line_length: "auto"
