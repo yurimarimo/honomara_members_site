@@ -1,67 +1,67 @@
 {% extends "template.html" %}
 {% block content %}
-<div class="container">
-  <div class="page-header">
-    <h1 id="tables">練習参加回数ランキング
-    </h1>
-  </div>
-  <div class="row">
-    <div class="col-xs-12">
-      <div class="row bs-component">
-        <form id="form-id" action="{{url_for('ranking')}}" method="get">
-          <select id="year_list" multiple name="year_list" size=1>
-            {% for year in years %}
-            <option value="{{ year }}" {{ "selected" if year in year_list }}> {{ year }}年度入学を含める</option>
-            {% endfor %}
-          </select>
-          <span id="all_set_selected" class="btn btn-sm">全学年選択</span>
-          <span id="all_reset_selected" class="btn btn-sm">全学年解除</span>
-          <label for="date-begin">開始:</label><input id="date-begin" type="date" name="begin" value={{begin}}>
-          <label for="date-end">終了:</label><input id="date-begin" type="date" name="end" value={{end}}>
-          <input type="submit" class="btn btn-sm" value="絞り込む">
-        </form>
-      </div>
+    <div class="container">
+        <div class="page-header">
+            <h1 id="tables">練習参加回数ランキング
+            </h1>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="row bs-component">
+                    <form id="form-id" action="{{url_for('ranking')}}" method="get">
+                        <select id="year_list" multiple="multiple" name="year_list" size="1">
+                            {% for year in years %}
+                                <option value="{{ year }}" {{ "selected" if year in year_list }}>
+                                    {{ year }}年度入学を含める</option>
+                            {% endfor %}
+                        </select>
+                        <span id="all_set_selected" class="btn btn-sm">全学年選択</span>
+                        <span id="all_reset_selected" class="btn btn-sm">全学年解除</span>
+                        <label for="date-begin">開始:</label><input id="date-begin" type="date" name="begin" value={{begin} }="}">
+                        <label for="date-end">終了:</label><input id="date-begin" type="date" name="end" value={{end} }="}">
+                        <input type="submit" class="btn btn-sm" value="絞り込む">
+                    </form>
+                </div>
 
-      <div class="bs-component">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>順位</th>
-              <th>名前</th>
-              <th>練習参加回数</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for item in items %}
-            <tr>
-              <th>{{ item['rank'] }}</th>
-              <th>
-                <a href="{{url_for('member_individual',member_id=item['id'])}}" style="text-decoration:none;">
-                  <span {% if item['sex'] in [1, 'female'] %} style="color: red;" {% else %} style="color: black;" {% endif %}>
-                    {{ item['show_name'] }}</span></a>
-              </th>
-              <th>{{ item['t_cnt'] }}</th>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
+                <div class="bs-component">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>順位</th>
+                                <th>名前</th>
+                                <th>練習参加回数</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in items %}
+                                <tr>
+                                    <th>{{ item['rank'] }}</th>
+                                    <th>
+                                        <a href="{{url_for('member_individual',member_id=item['id'])}}" style="text-decoration:none;">
+                                            <span {% if item['sex'] in [1, 'female'] %} style="color: black;" {% else %} {% endif %}>
+                                                {{ item['show_name'] }}</span></a>
+                                    </th>
+                                    <th>{{ item['t_cnt'] }}</th>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </div>
-  </div>
-
-</div>
 {% endblock %}
 
 {% block scripts %}
-{{super()}}
-<script>
-  $('#all_reset_selected').on('click', function() {
-    $("select option").prop("selected", false);
-  });
+    {{super()}}
+    <script>
+        $('#all_reset_selected').on('click', function () {
+            $("select option").prop("selected", false);
+        });
 
-  $('#all_set_selected').on('click', function() {
-    $("select option").prop("selected", true);
-  });
-</script>
+        $('#all_set_selected').on('click', function () {
+            $("select option").prop("selected", true);
+        });
+    </script>
 {% endblock scripts%}
-

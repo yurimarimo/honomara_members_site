@@ -1,89 +1,81 @@
-{% extends "template.html" %} {% block content %}
-<div class="container">
-  メンバー登録ページ
+{% extends "template.html" %}
+{% block content %}
+    <div class="container">
+        メンバー登録ページ
 
-  <form
-    action="{{url_for('member_edit')}}"
-    class="form"
-    method="post"
-    role="form"
-  >
-    {{ form.hidden_tag() }}
-    <div class="form-group required">
-      {{ form.year.label(class="control-label") }}
-      {{form.year(class="form-control")}}
-    </div>
-    <div class="form-group required">
-      {{ form.family_name.label(class="control-label") }}
-      {{form.family_name(class="form-control")}}
-    </div>
-    <div class="form-group required">
-      {{ form.family_kana.label(class="control-label") }}
-      {{form.family_kana(class="form-control")}}
-    </div>
-    <div class="form-group required">
-      {{ form.first_name.label(class="control-label") }}
-      {{form.first_name(class="form-control")}}
-    </div>
-    <div class="form-group required">
-      {{ form.first_kana.label(class="control-label") }}
-      {{form.first_kana(class="form-control")}}
-    </div>
-    <div class="form-group required">
-      {{ form.show_name.label(class="control-label") }}
-      {{form.show_name(class="form-control")}}
-    </div>
+        <form action="{{url_for('member_edit')}}" class="form" method="post" role="form">
+            {{ form.hidden_tag() }}
+            <div class="form-group required">
+                {{ form.year.label(class="control-label") }}
+                {{form.year(class="form-control")}}
+            </div>
+            <div class="form-group required">
+                {{ form.family_name.label(class="control-label") }}
+                {{form.family_name(class="form-control")}}
+            </div>
+            <div class="form-group required">
+                {{ form.family_kana.label(class="control-label") }}
+                {{form.family_kana(class="form-control")}}
+            </div>
+            <div class="form-group required">
+                {{ form.first_name.label(class="control-label") }}
+                {{form.first_name(class="form-control")}}
+            </div>
+            <div class="form-group required">
+                {{ form.first_kana.label(class="control-label") }}
+                {{form.first_kana(class="form-control")}}
+            </div>
+            <div class="form-group required">
+                {{ form.show_name.label(class="control-label") }}
+                {{form.show_name(class="form-control")}}
+            </div>
 
-    <div class="form-group">
-      <label class="control-label">姓</label>
-      <div class="radio-inline">
-        <label>
-          <input type="radio" name="sex" id="sex-0" value="male" {{"checked" if
-          form.sex.data == 0 or form.sex.data=='male' }}> 男
-        </label>
-      </div>
-      <div class="radio-inline">
-        <label>
-          <input type="radio" name="sex" id="sex-1" value="female" {{"checked"
-          if form.sex.data == 1 or form.sex.data=='female'}}> 女
-        </label>
-      </div>
-    </div>
+            <div class="form-group">
+                <label class="control-label">姓</label>
+                <div class="radio-inline">
+                    <label>
+                        <input type="radio" name="sex" id="sex-0" value="male" {{"checked" if
+          form.sex.data == 0 or form.sex.data=='male' }}>
+                        男
+                    </label>
+                </div>
+                <div class="radio-inline">
+                    <label>
+                        <input type="radio" name="sex" id="sex-1" value="female" {{"checked"
+          if form.sex.data == 1 or form.sex.data=='female'}}>
+                        女
+                    </label>
+                </div>
+            </div>
 
-    <div class="form-group">
-      <label class="control-label">状態</label>
-      <div class="radio-inline">
-        <label
-          ><input type="radio" name="visible" id="visible-0" value="True" {{
-          "checked" if (form.visible.data != False) }}>表示</label
-        >
-      </div>
-      <div class="radio-inline">
-        <label
-          ><input type="radio" name="visible" id="visible-1" value="False" {{
-          "checked" if (form.visible.data == False) }}>非表示</label
-        >
-      </div>
+            <div class="form-group">
+                <label class="control-label">状態</label>
+                <div class="radio-inline">
+                    <label ><input type="radio" name="visible" id="visible-0" value="True" {{
+          "checked" if (form.visible.data != False) }}>表示</label >
+                </div>
+                <div class="radio-inline">
+                    <label ><input type="radio" name="visible" id="visible-1" value="False" {{
+          "checked" if (form.visible.data == False) }}>非表示</label >
+                </div>
+            </div>
+            <input class="btn btn-default" id="submit" name="submit" type="submit" value="確定"/>
+        </form>
     </div>
-    <input
-      class="btn btn-default"
-      id="submit"
-      name="submit"
-      type="submit"
-      value="確定"
-    />
-  </form>
-</div>
-{% endblock %} {% block scripts%} {{super()}}
-<script src="{{url_for('.static',filename='js/jquery.autoKana.js')}}"></script>
-<script type="text/javascript">
-  $(document).ready(function () {
-    $.fn.autoKana('#family_name', '#family_kana', {
-      katakana: true, //true：カタカナ、false：ひらがな（デフォルト）
-    });
-    $.fn.autoKana('#first_name', '#first_kana', {
-      katakana: true,
-    });
-  });
-</script>
+{% endblock %}
+{% block scripts%}
+    {{super()}}
+    <script src="{{url_for('.static',filename='js/jquery.autoKana.js')}}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $
+                .fn
+                .autoKana('#family_name', '#family_kana', {
+                    katakana: true, //true：カタカナ、false：ひらがな（デフォルト）
+                });
+            $
+                .fn
+                .autoKana('#first_name', '#first_kana', {katakana: true});
+        });
+    </script>
 {% endblock %}
