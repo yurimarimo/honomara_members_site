@@ -15,8 +15,7 @@ from honomara_members_site.util import validate_course_and_set_name, form_set_ti
 @app.route('/')
 def index():
     after = After.query.order_by(After.updated_at.desc()).limit(1).one()
-    training = Training.query.order_by(
-        Training.updated_at.desc()).limit(1).one()
+    training = Training.query.order_by(Training.updated_at.desc()).limit(1).one()
     return render_template('index.html', after=after, training=training)
 
 
@@ -446,8 +445,7 @@ def result():
 
 @app.route('/competition/')
 def competition():
-    competitions = Competition.query.order_by(
-        Competition.place)
+    competitions = Competition.query.order_by(Competition.place)
     return render_template('competition.html', competitions=competitions)
 
 
