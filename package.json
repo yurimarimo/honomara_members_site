@@ -10,6 +10,10 @@
     "build": "webpack --config webpack.config.js --mode production"
   },
   "devDependencies": {
+    "@unibeautify/beautifier-prettydiff": "^0.6.0",
+    "prettier": "^2.1.2",
+    "prettydiff2": "^2.2.8",
+    "unibeautify": "^0.17.1",
     "webpack": "^4.19.1",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.11"

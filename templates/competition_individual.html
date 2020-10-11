@@ -1,8 +1,6 @@
-{% extends "template.html" %}
-
-{% block content %}
+{% extends "template.html" %} {% block content %}
 <div class="container">
-  <h1>{{competition.name}} </h1>
+  <h1>{{competition.name}}</h1>
   <div class="bs-component">
     <div class="row">
       <h2>コース情報</h2>
@@ -15,11 +13,9 @@
     <div class="row">
       <h2>過去参加状況</h2>
       <ul>
-        {% for course in competition.courses %}
-        {% for race in course.races %}
+        {% for course in competition.courses %} {% for race in course.races %}
         <li>{{course|fmt_course}} {{race.date}} ({{len(race.results)}}人)</li>
-        {% endfor %}
-        {% endfor %}
+        {% endfor %} {% endfor %}
       </ul>
     </div>
     <div class="row">
