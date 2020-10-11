@@ -47,7 +47,12 @@ def logout():
 @login_required
 def member():
     members = Member.query.order_by(Member.year.desc(), Member.family_kana)
-    return render_template('member.html', members=members, groupby=groupby, key=(lambda x: x.year))
+    return render_template(
+        'member.html',
+        members=members,
+        groupby=groupby,
+        key=(
+            lambda x: x.year))
 
 
 @app.route('/member/<int:member_id>')
@@ -59,7 +64,11 @@ def member_individual(member_id):
 
     m.results.sort(key=lambda x: x.race.date, reverse=False)
     raw_results = list(
-        filter(lambda x: x.race.course.distance in [42.195, 21.0975], m.results))
+        filter(
+            lambda x: x.race.course.distance in [
+                42.195,
+                21.0975],
+            m.results))
 
     results1 = []
     results2 = []
@@ -68,17 +77,20 @@ def member_individual(member_id):
     for r in raw_results:
         if r.distance == 42.195:
             results1 += [{'x': "{:%Y/%m/%d}".format(r.race.date),
-                          'y': r.time//1000}]
+                          'y': r.time // 1000}]
             races1 += [r.race.course.competition.name]
         else:
             results2 += [{'x': "{:%Y/%m/%d}".format(r.race.date),
-                          'y': r.time//1000}]
+                          'y': r.time // 1000}]
             races2 += [r.race.course.competition.name]
 
-    trainings = db.session.query(TrainingParticipant.member_id, Training.date).\
-        filter(TrainingParticipant.member_id == member_id).\
-        join(Training, Training.id == TrainingParticipant.training_id).\
-        order_by(Training.date).all()
+    trainings = db.session.query(
+        TrainingParticipant.member_id,
+        Training.date). filter(
+        TrainingParticipant.member_id == member_id). join(
+            Training,
+            Training.id == TrainingParticipant.training_id). order_by(
+                Training.date).all()
 
     afters = db.session.query(AfterParticipant.member_id, After.date).\
         filter(AfterParticipant.member_id == member_id).\
@@ -106,27 +118,55 @@ def member_individual(member_id):
             y = []
             for year in group:
                 y.append(year['month'])
-            x.append({'year': key, name+'_sum': len(y), name+'_first_half': len(
-                [i for i in y if i < 10]), name+'_second_half': len([i for i in y if i >= 10])})
+            x.append({'year': key,
+                      name + '_sum': len(y),
+                      name + '_first_half': len([i for i in y if i < 10]),
+                      name + '_second_half': len([i for i in y if i >= 10])})
 
         return x
 
     participations = []
-    for key, group in groupby(sorted(summary(trainings, "trainings") + summary(afters, "afters") + summary(afterdays, "afterdays"), key=lambda x: x['year']), key=lambda x: x['year']):
+    for key, group in groupby(
+        sorted(
+            summary(
+            trainings, "trainings") + summary(
+                afters, "afters") + summary(
+                    afterdays, "afterdays"), key=lambda x: x['year']), key=lambda x: x['year']):
         y = []
         for year in group:
             y.append(year)
-        for i in range(len(y)-1):
-            y[0].update(y[i+1])
+        for i in range(len(y) - 1):
+            y[0].update(y[i + 1])
         participations.append(y[0])
 
-    restaurants = db.session.query(AfterParticipant.member_id, Restaurant.name, Restaurant.id, func.count(After.id).label('cnt')).\
-        filter(AfterParticipant.member_id == member_id).\
-        join(After, After.id == AfterParticipant.after_id).\
-        join(Restaurant, Restaurant.id == After.restaurant_id).\
-        group_by(Restaurant.id).order_by(db.text('cnt DESC')).all()
+    restaurants = db.session.query(
+        AfterParticipant.member_id,
+        Restaurant.name,
+        Restaurant.id,
+        func.count(
+            After.id).label('cnt')). filter(
+        AfterParticipant.member_id == member_id). join(
+                After,
+                After.id == AfterParticipant.after_id). join(
+                    Restaurant,
+                    Restaurant.id == After.restaurant_id). group_by(
+                        Restaurant.id).order_by(
+                            db.text('cnt DESC')).all()
 
-    return render_template('member_individual.html', member=m, results1=str(results1), results2=str(results2), races1=str(races1), races2=str(races2), first_training=first_training, first_after=first_after, count_trainings=count_trainings, count_afters=count_afters, count_afterdays=count_afterdays, participations=participations, restaurants=restaurants)
+    return render_template(
+        'member_individual.html',
+        member=m,
+        results1=str(results1),
+        results2=str(results2),
+        races1=str(races1),
+        races2=str(races2),
+        first_training=first_training,
+        first_after=first_after,
+        count_trainings=count_trainings,
+        count_afters=count_afters,
+        count_afterdays=count_afterdays,
+        participations=participations,
+        restaurants=restaurants)
 
 
 @app.route('/member/edit', methods=['GET', 'POST'])
@@ -360,8 +400,11 @@ def after_edit():
         form.method.data = 'PUT'
     else:
         if keyword is not None:
-            form.restaurant.choices = [(r.id, "{}({})".format(
-                r.name, r.place)) for r in Restaurant.query.filter(Restaurant.name.contains(keyword)).order_by(Restaurant.score.desc()).all()]
+            form.restaurant.choices = [
+                (r.id, "{}({})".format(
+                    r.name, r.place)) for r in Restaurant.query.filter(
+                    Restaurant.name.contains(keyword)).order_by(
+                    Restaurant.score.desc()).all()]
         form.method.data = 'POST'
 
     return render_template('after_edit.html', form=form)
@@ -440,7 +483,10 @@ def result():
     page = request.args.get('page') or 1
     page = max([1, int(page)])
     results = Race.query.join(Course).order_by(
-        Race.date.desc(), text("course.competition_id")).paginate(page, per_page)
+        Race.date.desc(),
+        text("course.competition_id")).paginate(
+        page,
+        per_page)
     return render_template('result.html', pagination=results)
 
 
@@ -527,10 +573,14 @@ def course_edit():
         return redirect(url_for('course_confirm'), code=307)
 
     competition_id = request.args.get(
-        "competition_id", default=-1, type=int) or request.form.get('competition_id')
+        "competition_id",
+        default=-1,
+        type=int) or request.form.get('competition_id')
 
     if competition_id == -1:
-        return render_template('template_message.html', message='大会指定が無効です<br>先に大会を作成してください')
+        return render_template(
+            'template_message.html',
+            message='大会指定が無効です<br>先に大会を作成してください')
 
     competition = Competition.query.get(competition_id)
     form.competition_id.data = competition.id
@@ -545,7 +595,10 @@ def course_edit():
         form.method.data = 'PUT'
     else:
         form.method.data = 'POST'
-    return render_template('course_edit.html', form=form, competition=competition)
+    return render_template(
+        'course_edit.html',
+        form=form,
+        competition=competition)
 
 
 @app.route('/course/confirm', methods=["POST"])
@@ -579,7 +632,10 @@ def course_confirm():
             course = Course.query.get(form.id.data)
             form = CourseForm(obj=course)
         competition = Competition.query.get(form.competition_id.data)
-        return render_template('course_confirm.html', form=form, competition=competition)
+        return render_template(
+            'course_confirm.html',
+            form=form,
+            competition=competition)
 
 
 @app.route('/race/')
@@ -675,8 +731,9 @@ def result_edit():
         app.logger.info("restart")
         app.logger.info(form.data)
 
-    form.competition_id.choices = [(c.id, c.name) for c in Competition.query.order_by(
-        Competition.name.desc()).all()]
+    form.competition_id.choices = [
+        (c.id, c.name) for c in Competition.query.order_by(
+            Competition.name.desc()).all()]
 
     # 大会未指定時は大会選択へjump
     if form.competition_id.data is None:
@@ -685,20 +742,29 @@ def result_edit():
 
     competition = Competition.query.get(form.competition_id.data)
 
-    form.course_id.choices = [(c.id, c.distance) for c in Course.query.filter(Course.competition_id == form.competition_id.data).order_by(
-        Course.distance.desc()).all()]
+    form.course_id.choices = [
+        (c.id, c.distance) for c in Course.query.filter(
+            Course.competition_id == form.competition_id.data).order_by(
+            Course.distance.desc()).all()]
 
     if form.method.data == "POST":
         # コース未指定時はコース選択へjump
         if form.course_id.data is None:
-            return render_template('result_edit_course.html', form=form, competition=competition)
+            return render_template(
+                'result_edit_course.html',
+                form=form,
+                competition=competition)
         else:
             course = Course.query.get(form.course_id.data)
 
         # レース(日付)未指定時は
         if form.date.data is None:
             if form.race_id.data is None:
-                return render_template('result_edit_race.html', form=form, competition=competition, course=course)
+                return render_template(
+                    'result_edit_race.html',
+                    form=form,
+                    competition=competition,
+                    course=course)
             else:
                 race = Race.query.get(form.race_id.data)
                 form.date.data = race.date
@@ -725,7 +791,11 @@ def result_edit():
 #         app.logger.info("participants of results")
 #         app.logger.info(form.participants)
 
-    return render_template('result_edit.html', form=form, competition=competition, course=course)
+    return render_template(
+        'result_edit.html',
+        form=form,
+        competition=competition,
+        course=course)
 
 
 @app.route('/result/confirm', methods=['POST'])
@@ -744,11 +814,14 @@ def result_confirm():
 #     race = form.race_id.data or -1
 #     participants = form.participants.data
 
-    form.competition_id.choices = [(c.id, c.name) for c in Competition.query.order_by(
-        Competition.name.desc()).all()]
+    form.competition_id.choices = [
+        (c.id, c.name) for c in Competition.query.order_by(
+            Competition.name.desc()).all()]
 
-    form.course_id.choices = [(c.id, c.distance) for c in Course.query.join(Competition).filter(
-        Competition.id == form.competition_id.data).order_by(Course.distance.desc()).all()]
+    form.course_id.choices = [
+        (c.id, c.distance) for c in Course.query.join(Competition).filter(
+            Competition.id == form.competition_id.data).order_by(
+            Course.distance.desc()).all()]
 
     if form.validate_on_submit() and request.form.get('confirmed') == 'True':
         if request.form.get('method') == 'DELETE':
@@ -779,7 +852,8 @@ def result_confirm():
             if form.race_id.data is not None and form.race_id.data >= 0:
                 race = Race.query.get(form.race_id.data)
             elif form.date.data is not None:
-                race = Race.query.filter(Race.course_id == form.course_id.data).filter(
+                race = Race.query.filter(
+                    Race.course_id == form.course_id.data).filter(
                     Race.date == form.date.data).all()
                 if len(race) == 1:
                     race = race[0]
@@ -788,7 +862,8 @@ def result_confirm():
                     race.course_id = form.course_id.data
                     race.date = form.date.data
                     db.session.add(race)
-                    race = Race.query.filter(Race.course_id == race.course_id).filter(
+                    race = Race.query.filter(
+                        Race.course_id == race.course_id).filter(
                         Race.date == race.date).one()
                 else:
                     assert(False)  # TODO
@@ -804,14 +879,21 @@ def result_confirm():
             result.id = None
             db.session.add(result)
             db.session.commit()
-            flash('{}さんの{}の結果の登録が完了しました'.format(
-                result.participants[0].show_name, result.race.course.competition.name), 'info')
+            flash(
+                '{}さんの{}の結果の登録が完了しました'.format(
+                    result.participants[0].show_name,
+                    result.race.course.competition.name),
+                'info')
 
         app.logger.info("form.submit.data")
         app.logger.info(form.submit.data)
         app.logger.info(request.form.get("submit"))
         if request.form.get("submitValue") == "登録して、同じ大会の記録を追加":
-            return redirect(url_for('result_edit', restart="race", race_id=result.race_id))
+            return redirect(
+                url_for(
+                    'result_edit',
+                    restart="race",
+                    race_id=result.race_id))
         else:
             return redirect(url_for('result'))
     else:  # show confirm view when not confirmed
@@ -833,13 +915,25 @@ def result_confirm():
         course = Course.query.get(form.course_id.data)
         form.participants = [Member.query.get(mid)
                              for mid in form.participants.data]
-        return render_template('result_confirm.html', form=form, competition=competition, course=course)
+        return render_template(
+            'result_confirm.html',
+            form=form,
+            competition=competition,
+            course=course)
 
 
 @ app.route('/ranking')
 def ranking():
-    query = db.session.query(Member.show_name, func.count(TrainingParticipant.training_id).label('cnt'), Member.sex, Member.id).join(
-        TrainingParticipant, TrainingParticipant.member_id == Member.id).join(Training, TrainingParticipant.training_id == Training.id)
+    query = db.session.query(
+        Member.show_name,
+        func.count(
+            TrainingParticipant.training_id).label('cnt'),
+        Member.sex,
+        Member.id).join(
+            TrainingParticipant,
+            TrainingParticipant.member_id == Member.id).join(
+                Training,
+        TrainingParticipant.training_id == Training.id)
     year_list = request.args.getlist('year_list')
     app.logger.info(request.form)
 
@@ -852,11 +946,12 @@ def ranking():
     if year_list:
         query = query.filter(Member.year.in_(year_list))
         items = [{'rank': i + 1, 'show_name': d[0], 't_cnt': d[1], 'sex': d[2], 'id': d[3]}
-                 for i, d in enumerate(query.order_by(db.text('cnt DESC')).all())
-                 ]
+                 for i, d in enumerate(query.order_by(db.text('cnt DESC')).all())]
     year_list = map(lambda x: int(x), year_list)
 
-    return render_template('ranking.html', items=items, begin=begin, end=end, year_list=year_list, years=range(current_school_year, 1990, -1))
+    return render_template(
+        'ranking.html', items=items, begin=begin, end=end, year_list=year_list, years=range(
+            current_school_year, 1990, -1))
 
 
 @ app.route('/search/')
@@ -874,7 +969,10 @@ def restaurant():
     page = max([1, int(page)])
     restaurants = Restaurant.query.order_by(
         Restaurant.score.desc()).paginate(page, per_page)
-    return render_template('restaurant.html', pagination=restaurants, afters=afters)
+    return render_template(
+        'restaurant.html',
+        pagination=restaurants,
+        afters=afters)
 
 
 @ app.route('/restaurant/edit', methods=['GET', 'POST'])
@@ -948,4 +1046,5 @@ def restaurant_confirm():
 
 @app.errorhandler(404)
 def page_not_found(error):
-    return render_template('template_message.html', message='指定されたページは存在しません'), 404
+    return render_template('template_message.html',
+                           message='指定されたページは存在しません'), 404
