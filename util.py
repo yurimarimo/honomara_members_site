@@ -48,14 +48,14 @@ def validate_course_and_set_name(form=None):
         elif form.type.data == 'road':
             if form.distance.data == 42.195:
                 form.show_name.data = 'フルマラソン'
-            elif form.distance.data == 42.195/2:
+            elif form.distance.data == 42.195 / 2:
                 form.show_name.data = 'ハーフマラソン'
             elif form.show_name.data is None:
                 form.show_name.data = '{:f}km'.format(form.distance.data)
         elif form.type.data == 'track':
             if form.show_name.data is None:
                 form.show_name.data = '{:f}m走'.format(
-                    int(form.distance.data*1000))
+                    int(form.distance.data * 1000))
         elif form.type.trail == 'trail':
             if form.show_name.data is None:
                 form.show_name.data = '{:f}kmコース'.format(form.distance.data)
@@ -91,9 +91,9 @@ def form_set_time(form=None):
                           * 60 + form.time_s.data) * 1000 + form.time_ms.data
     else:
         tmp = form.time.data
-        form.time_ms.data, tmp = tmp % 1000, tmp//1000
-        form.time_s.data, tmp = tmp % 60, tmp//60
-        form.time_m.data, tmp = tmp % 60, tmp//60
+        form.time_ms.data, tmp = tmp % 1000, tmp // 1000
+        form.time_s.data, tmp = tmp % 60, tmp // 60
+        form.time_m.data, tmp = tmp % 60, tmp // 60
         form.time_h.data = tmp
 
 
