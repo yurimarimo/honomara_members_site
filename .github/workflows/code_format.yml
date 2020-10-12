@@ -19,3 +19,10 @@ jobs:
       - name: Force fail when the code is not formatted
         if: steps.autopep8.outputs.exit-code == 2
         run: exit 1
+  format_js_and_html:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+      - run: yarn
+      - run: "! (./node_modules/.bin/js-beautify -s 2 -n -rf templates/* src/index.js | grep -v unchanged)"
