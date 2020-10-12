@@ -2,17 +2,20 @@
 {% block styles %}
 {{ super() }}
 <style>
-.borders {
-  border-top: lightgray 1px solid;
-  padding-top: 5px;
-  overflow: hidden;
-}
-.panel-default {
-  font-size: 0.8em;
-}
-.btn btn-xs {
-  margin: 2px 6px;
-}
+  .borders {
+    border-top: lightgray 1px solid;
+    padding-top: 5px;
+    overflow: hidden;
+  }
+
+  .panel-default {
+    font-size: 0.8em;
+  }
+
+  .btn btn-xs {
+    margin: 2px 6px;
+  }
+
 </style>
 {% endblock styles %}
 {% block content %}
@@ -27,11 +30,9 @@
         </h1>
         <div class="bs-component">
           <ul class="pager">
-            <li class="previous {{ "disabled" if not pagination.has_prev}}"><a
-                href="{{url_for('result',page=pagination.prev_num) }}">&larr; Newer</a></li>
+            <li class="previous {{ "disabled" if not pagination.has_prev}}"><a href="{{url_for('result',page=pagination.prev_num) }}">&larr; Newer</a></li>
             <li>{{ pagination.page }}/{{ pagination.pages }}</li>
-            <li class="next  {{ "disabled" if not pagination.has_next}}"><a
-                href="{{url_for('result',page=pagination.next_num) }}">Older &rarr;</a></li>
+            <li class="next  {{ "disabled" if not pagination.has_next}}"><a href="{{url_for('result',page=pagination.next_num) }}">Older &rarr;</a></li>
           </ul>
         </div>
       </div>
@@ -43,28 +44,25 @@
             <div class="panel-heading">
               <div class="row" style="margin-top: 0;">
                 <h4 class="col-xs-12 col-sm-7" style="padding: 0 10px; margin: 0px;">
-                  {{ race.date }} {{ race.course.competition.name }}  {{ race.course | fmt_course }}
+                  {{ race.date }} {{ race.course.competition.name }} {{ race.course | fmt_course }}
 
                 </h4>
                 {% if current_user.is_authenticated %}
                 <div class="col-xs-12 col-sm-5" style="margin-top: 0px;">
-                  <form method="POST" action="{{url_for('result_edit')}}"
-                                      style="display: inline-block; float: right; margin: 0 3px;">
+                  <form method="POST" action="{{url_for('result_edit')}}" style="display: inline-block; float: right; margin: 0 3px;">
                     <input type="hidden" name="method" value="POST">
                     <input type="hidden" name="competition_id" value={{race.course.competition_id}}>
                     <input type="hidden" name="course_id" value={{race.course.id}}>
                     <input type="hidden" name="race_id" value={{race.id}}>
                     <input type="submit" value="追加" class="btn btn-xs btn-primary">
                   </form>
-                  <form method="POST" action="{{url_for('race_edit')}}"
-                                      style="display: inline-block; float: right; margin: 0 3px;">
+                  <form method="POST" action="{{url_for('race_edit')}}" style="display: inline-block; float: right; margin: 0 3px;">
                     <input type="hidden" name="method" value="PUT">
                     <input type="hidden" name="id" value="{{race.id}}">
                     <input type="submit" value="日程編集" class="btn btn-xs btn-warning">
                   </form>
                   {% if len(race.results) == 0 %}
-                  <form method="POST" action="{{url_for('race_confirm')}}"
-                                      style="display: inline-block; float: right; margin: 0 3px;">
+                  <form method="POST" action="{{url_for('race_confirm')}}" style="display: inline-block; float: right; margin: 0 3px;">
                     <input type="hidden" name="method" value="DELETE">
                     <input type="hidden" name="course_id" value="{{race.course_id}}">
                     <input type="hidden" name="id" value="{{race.id}}">
@@ -104,15 +102,13 @@
                   <a style="float: right; padding:0 7px;" onclick="javascript:delete_{{result.id}}.submit()"><i class="fas fa-trash-alt"></i></a>
                   <a style="float: right; padding:0 7px;" onclick="javascript:edit_{{result.id}}.submit()"><i class="fas fa-pen"></i></a>
                 </div> <!-- .col-*-* -->
-                <form method="POST" id="edit_{{result.id}}" action="{{url_for('result_edit')}}"
-                                                            style="display: inline-block; float: right; margin: 0 3px;">
+                <form method="POST" id="edit_{{result.id}}" action="{{url_for('result_edit')}}" style="display: inline-block; float: right; margin: 0 3px;">
                   <input type="hidden" name="method" value="PUT">
                   <input type="hidden" name="result_id" value="{{result.id}}">
                   <input type="hidden" name="competition_id" value={{race.course.competition_id}}>
                   <!-- <input type="submit" value="編集" class="btn btn-xs btn-warning"> -->
                 </form>
-                <form method="POST" id="delete_{{result.id}}" action="{{url_for('result_confirm')}}"
-                                                              style="display: inline-block; float: right; margin: 0 3px;">
+                <form method="POST" id="delete_{{result.id}}" action="{{url_for('result_confirm')}}" style="display: inline-block; float: right; margin: 0 3px;">
                   <input type="hidden" name="method" value="DELETE">
                   <input type="hidden" name="result_id" value="{{result.id}}">
                   <!-- <input type="submit" value="削除" class="btn btn-xs btn-danger"> -->
@@ -128,11 +124,9 @@
         <div class="bs-component">
           <div class="bs-component">
             <ul class="pager">
-              <li class="previous {{ "disabled" if not pagination.has_prev}}"><a
-                  href="{{url_for('result',page=pagination.prev_num) }}">&larr; Newer</a></li>
+              <li class="previous {{ "disabled" if not pagination.has_prev}}"><a href="{{url_for('result',page=pagination.prev_num) }}">&larr; Newer</a></li>
               <li> {{ pagination.page }}/{{ pagination.pages }} </li>
-              <li class="next  {{ "disabled" if not pagination.has_next}}"><a
-                  href="{{url_for('result',page=pagination.next_num) }}">Older &rarr;</a></li>
+              <li class="next  {{ "disabled" if not pagination.has_next}}"><a href="{{url_for('result',page=pagination.next_num) }}">Older &rarr;</a></li>
             </ul>
           </div>
         </div>

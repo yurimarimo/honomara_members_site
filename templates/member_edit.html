@@ -30,12 +30,10 @@
     <div class="form-group">
       <label class="control-label">状態</label>
       <div class="radio-inline">
-        <label><input type="radio" name="visible" id="visible-0" value="True"
-                                                                 {{ "checked" if (form.visible.data != False) }}>表示</label>
+        <label><input type="radio" name="visible" id="visible-0" value="True" {{ "checked" if (form.visible.data != False) }}>表示</label>
       </div>
       <div class="radio-inline">
-        <label><input type="radio" name="visible" id="visible-1" value="False"
-                                                                 {{ "checked" if (form.visible.data == False) }}>非表示</label>
+        <label><input type="radio" name="visible" id="visible-1" value="False" {{ "checked" if (form.visible.data == False) }}>非表示</label>
       </div>
     </div>
     <input class="btn btn-default" id="submit" name="submit" type="submit" value="確定">
@@ -51,12 +49,13 @@
   $(document).ready(
     function() {
       $.fn.autoKana('#family_name', '#family_kana', {
-        katakana : true  //true：カタカナ、false：ひらがな（デフォルト）
+        katakana: true //true：カタカナ、false：ひらがな（デフォルト）
       });
       $.fn.autoKana('#first_name', '#first_kana', {
-        katakana : true
+        katakana: true
       });
     }
   );
+
 </script>
 {% endblock %}

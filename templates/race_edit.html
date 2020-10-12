@@ -4,7 +4,7 @@
   大会種目{{"編集" if form.id.data else "登録" }}ページ
   <div class="row">
     <div class="col-lg-8 col-lg-offset-2 col-sm-12">
-      <h3>{{ course.competition.name }}  {{ course.distance }}km </h3>
+      <h3>{{ course.competition.name }} {{ course.distance }}km </h3>
       <form action="{{url_for('race_edit')}}" class="form" method="post" role="form">
         {{ form.hidden_tag() }}
         <input type="hidden" name="course_id" value="{{ form.course_id.data }}">

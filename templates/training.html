@@ -3,22 +3,22 @@
 {% block styles %}
 {{ super() }}
 <style>
+  .row-eq-height {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+  }
 
-.row-eq-height {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.panel {
+  .panel {
     height: 95%;
-}
+  }
 
-.btn-sm {
-  margin: 2px 6px;
-}
+  .btn-sm {
+    margin: 2px 6px;
+  }
+
 </style>
 {% endblock %}
 
@@ -34,11 +34,9 @@
         </h1>
         <div class="bs-component">
           <ul class="pager">
-            <li class="previous {{ "disabled" if not pagination.has_prev}}"><a
-              href="{{url_for('training',page=pagination.prev_num) }}">&larr; Newer</a></li>
+            <li class="previous {{ "disabled" if not pagination.has_prev}}"><a href="{{url_for('training',page=pagination.prev_num) }}">&larr; Newer</a></li>
             <li>{{ pagination.page }}/{{ pagination.pages }}</li>
-            <li class="next  {{ "disabled" if not pagination.has_next}}"><a
-              href="{{url_for('training',page=pagination.next_num) }}">Older &rarr;</a></li>
+            <li class="next  {{ "disabled" if not pagination.has_next}}"><a href="{{url_for('training',page=pagination.next_num) }}">Older &rarr;</a></li>
           </ul>
         </div>
       </div>
@@ -51,11 +49,9 @@
       </div>
       <div class="bs-component">
         <ul class="pager">
-          <li class="previous {{ "disabled" if not pagination.has_prev}}"><a
-            href="{{url_for('training',page=pagination.prev_num) }}">&larr; Newer</a></li>
+          <li class="previous {{ "disabled" if not pagination.has_prev}}"><a href="{{url_for('training',page=pagination.prev_num) }}">&larr; Newer</a></li>
           <li>{{ pagination.page }}/{{ pagination.pages }}</li>
-          <li class="next  {{ "disabled" if not pagination.has_next}}"><a
-            href="{{url_for('training',page=pagination.next_num) }}">Older &rarr;</a></li>
+          <li class="next  {{ "disabled" if not pagination.has_next}}"><a href="{{url_for('training',page=pagination.next_num) }}">Older &rarr;</a></li>
         </ul>
       </div>
     </div>

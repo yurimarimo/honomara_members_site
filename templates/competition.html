@@ -27,19 +27,19 @@
                     <rt>{{competition.kana|default("<未入力>", true)}}</rt>
                   </ruby>
                 </a></td>
-                <td>{{competition.show_name|default("<未入力>", true)}}</td>
-                <td>{{competition.place|default("<未入力>", true)}}</td>
-                {% if current_user.is_authenticated %}
-                <td>
-                  <a style="float: right; padding:0 5px;" onclick="javascript:delete_{{competition.id}}.submit()"><i class="fas fa-trash-alt"></i></a>
-                  <a style="float: right; padding:0 5px;" onclick="javascript:edit_{{competition.id}}.submit()"><i class="fas fa-pen"></i></a>
-                  <form method="get" id="edit_{{competition.id}}" action="{{url_for('competition_edit')}}">
-                    <input type="hidden" name="method" value="PUT">
-                    <input type="hidden" name="id" value="{{competition.id}}">
-                  </form>
-                  <form method="post" id="delete_{{competition.id}}" action="{{url_for('competition_confirm')}}>
-                    <input type="hidden" name="method" value="DELETE">
-                    <input type="hidden" name="id" value="{{competition.id}}"">
+              <td>{{competition.show_name|default("<未入力>", true)}}</td>
+              <td>{{competition.place|default("<未入力>", true)}}</td>
+              {% if current_user.is_authenticated %}
+              <td>
+                <a style="float: right; padding:0 5px;" onclick="javascript:delete_{{competition.id}}.submit()"><i class="fas fa-trash-alt"></i></a>
+                <a style="float: right; padding:0 5px;" onclick="javascript:edit_{{competition.id}}.submit()"><i class="fas fa-pen"></i></a>
+                <form method="get" id="edit_{{competition.id}}" action="{{url_for('competition_edit')}}">
+                  <input type="hidden" name="method" value="PUT">
+                  <input type="hidden" name="id" value="{{competition.id}}">
+                </form>
+                <form method="post" id="delete_{{competition.id}}" action="{{url_for('competition_confirm')}}>
+                    <input type=" hidden" name="method" value="DELETE">
+                  <input type="hidden" name="id" value="{{competition.id}}"">
                   </form>
                 </td>
                 {% endif %}

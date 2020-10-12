@@ -5,13 +5,11 @@
   <div class="row">
     <div class="col-lg-8 col-lg-offset-2 col-sm-12">
       <div id="div_1">
-        <button class="btn btn-default mb-5" style="width:200px; margin-bottom: 20px;"
-                                             onClick="document.getElementById('div_2').style.display='block';
+        <button class="btn btn-default mb-5" style="width:200px; margin-bottom: 20px;" onClick="document.getElementById('div_2').style.display='block';
                                              document.getElementById('div_1').style.display='none'">店舗検索(部分一致)</button>
       </div>
       <div id="div_2" style="display:none">
-        <button class="btn btn-default" style="width:200px; margin-bottom: 20px;"
-                                        onClick="document.getElementById('div_2').style.display='none';
+        <button class="btn btn-default" style="width:200px; margin-bottom: 20px;" onClick="document.getElementById('div_2').style.display='none';
                                         document.getElementById('div_1').style.display='block'">非表示</button>
         <form class="form-group" action="{{url_for('after_edit')}}" method="get">
           <div class="d-inline-flex">

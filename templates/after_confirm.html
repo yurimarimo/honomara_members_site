@@ -23,11 +23,11 @@
               <dd>{{form.after_stage.data}}</dd>
               <dt>参加者({{len(form.participants.data)}}人)</dt>
               <dd>
-              {% for m in form.participants.data %}
-              <span {% if m.sex == 1 or m.sex=='female' %} style="color: red;" {% endif %}>
-                {{ m.show_name }}
-              </span>
-              {% endfor %}
+                {% for m in form.participants.data %}
+                <span {% if m.sex == 1 or m.sex=='female' %} style="color: red;" {% endif %}>
+                  {{ m.show_name }}
+                </span>
+                {% endfor %}
               </dd>
               <dt>タイトル</dt>
               <dd>{{form.title.data}}</dd>
@@ -55,13 +55,13 @@
       <input type="hidden" name="participants" value="{{ m.id }}">
       {% endfor %}
       {% if form.method.data == 'POST' %}
-      <input type="submit" value="登録"  class="btn btn-primary">
+      <input type="submit" value="登録" class="btn btn-primary">
       {% elif form.method.data == 'PUT' %}
       <input type="hidden" name="id" value="{{ form.id.data }}">
-      <input type="submit" value="更新"  class="btn btn-warning">
+      <input type="submit" value="更新" class="btn btn-warning">
       {% elif form.method.data == 'DELETE' %}
       <input type="hidden" name="id" value="{{ form.id.data }}">
-      <input type="submit" value="削除"  class="btn btn-danger">
+      <input type="submit" value="削除" class="btn btn-danger">
       {% endif %}
       <a href="{{url_for('after')}}" class="btn btn-default">キャンセル</a>
     </form>

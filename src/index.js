@@ -1,5 +1,21 @@
-import {config, dom, library} from '@fortawesome/fontawesome-svg-core';
-import {faPen,faEdit,faTrashAlt,faRunning,faUtensils,faMedal,faTrophy,faSearch,faFolder,faSignOutAlt,faSignInAlt} from '@fortawesome/free-solid-svg-icons';
+import {
+  config,
+  dom,
+  library
+} from '@fortawesome/fontawesome-svg-core';
+import {
+  faPen,
+  faEdit,
+  faTrashAlt,
+  faRunning,
+  faUtensils,
+  faMedal,
+  faTrophy,
+  faSearch,
+  faFolder,
+  faSignOutAlt,
+  faSignInAlt
+} from '@fortawesome/free-solid-svg-icons';
 
 library.add(faEdit);
 library.add(faPen);

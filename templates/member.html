@@ -10,7 +10,7 @@
       </div>
       <div class="bs-component">
         {% for members_by_year in groupby(members, key=key) %}
-        <h3 ><a data-toggle="collapse" href=".year_{{members_by_year[0] }}">{{members_by_year[0] }}年度入学</a></h3>
+        <h3><a data-toggle="collapse" href=".year_{{members_by_year[0] }}">{{members_by_year[0] }}年度入学</a></h3>
         <div class="collapse year_{{members_by_year[0] }}">
           <table class="table table-striped table-hover ">
             <thead>
@@ -37,19 +37,21 @@
                           <span style="color: black;">
                             {% endif %}
 
-                            <ruby>{{ member.family_name }}<rp>（</rp>
+                            <ruby>{{ member.family_name }}
+                              <rp>（</rp>
                               <rt>{{ member.family_kana if member.family_kana  }}</rt>
                               <rp>）</rp>
                             </ruby>
-                            <ruby>{{ member.first_name }}<rp>（</rp>
+                            <ruby>{{ member.first_name }}
+                              <rp>（</rp>
                               <rt>{{ member.first_kana if member.first_kana  }}</rt>
                               <rp>）</rp>
                             </ruby>
                           </span>
                     </a>
                     {% if not member.visible %}
-                        </span>
-                        {% endif %}
+                  </span>
+                  {% endif %}
                 </th>
                 <th>
                   {% if not member.visible %}
