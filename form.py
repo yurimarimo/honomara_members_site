@@ -19,22 +19,22 @@ visible_member_list_for_form_1 = [(m.id, m.show_name)
 
 visible_member_list_for_form_2 = [(m.id, m.show_name)
                                   for m in Member.query.filter_by(visible=True).
-                                  filter(Member.year == current_school_year-1).
+                                  filter(Member.year == current_school_year - 1).
                                   order_by(Member.family_kana).all()]
 
 visible_member_list_for_form_3 = [(m.id, m.show_name)
                                   for m in Member.query.filter_by(visible=True).
-                                  filter(Member.year == current_school_year-2).
+                                  filter(Member.year == current_school_year - 2).
                                   order_by(Member.family_kana).all()]
 
 visible_member_list_for_form_4 = [(m.id, m.show_name)
                                   for m in Member.query.filter_by(visible=True).
-                                  filter(Member.year == current_school_year-3).
+                                  filter(Member.year == current_school_year - 3).
                                   order_by(Member.family_kana).all()]
 
 visible_member_list_for_form_5 = [(m.id, m.show_name)
                                   for m in Member.query.filter_by(visible=True).
-                                  filter(Member.year <= current_school_year-4).
+                                  filter(Member.year <= current_school_year - 4).
                                   order_by(Member.year.desc(), Member.family_kana).all()]
 
 training_place_list = [('代々木公園', '代々木公園'), ('皇居', '皇居'), ('山手線企画',
@@ -65,7 +65,7 @@ class MemberForm(FlaskForm):
 class TrainingForm(FlaskForm):
     id = HiddenField(validators=[Optional()])
     date = DateField('練習日:', validators=[InputRequired()])
-    type = SelectField('練習場所等:', coerce=str,  validators=[
+    type = SelectField('練習場所等:', coerce=str, validators=[
         InputRequired()], choices=training_place_list)
     weather = SelectField('天気:', validators=[Optional()], choices=weather_list)
     participants1 = SelectMultipleField('1年生', coerce=int,
@@ -125,8 +125,8 @@ class AfterForm(FlaskForm):
 class CompetitionForm(FlaskForm):
     id = HiddenField(validators=[Optional()])
     name = StringField('大会名:', validators=[InputRequired()])
-    kana = StringField('大会名(カナ):',  validators=[Optional()])
-    show_name = StringField('表示名:',  validators=[Optional()])
+    kana = StringField('大会名(カナ):', validators=[Optional()])
+    show_name = StringField('表示名:', validators=[Optional()])
     place = StringField('場所(県名、地域名等):', validators=[Optional()])
     comment = TextAreaField('コメント:', validators=[Optional()])
     confirmed = HiddenField(validators=[Optional()])
@@ -140,7 +140,7 @@ class CourseForm(FlaskForm):
     type = SelectField('競技種類', validators=[InputRequired()], choices=[
         ('road', 'ロード'), ('track', 'トラック競技'), ('trail', 'トレイル'), ('time', '時間走'), ('relay', 'リレーマラソン'), ('other', 'その他')]
     )
-    show_name = StringField('表示名(オプション:ファンラン、ロング等)',  validators=[Optional()])
+    show_name = StringField('表示名(オプション:ファンラン、ロング等)', validators=[Optional()])
     distance = FloatField('距離(km単位)', validators=[Optional()], default=None)
     time = IntegerField('競技時間((時間単位))', validators=[Optional()], default=None)
     elevation = FloatField('累積標高(m単位)', validators=[Optional()], default=0)

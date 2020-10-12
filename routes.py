@@ -47,7 +47,8 @@ def logout():
 @login_required
 def member():
     members = Member.query.order_by(Member.year.desc(), Member.family_kana)
-    return render_template('member.html', members=members, groupby=groupby, key=(lambda x: x.year))
+    return render_template('member.html', members=members,
+                           groupby=groupby, key=(lambda x: x.year))
 
 
 @app.route('/member/<int:member_id>')
@@ -68,11 +69,11 @@ def member_individual(member_id):
     for r in raw_results:
         if r.distance == 42.195:
             results1 += [{'x': "{:%Y/%m/%d}".format(r.race.date),
-                          'y': r.time//1000}]
+                          'y': r.time // 1000}]
             races1 += [r.race.course.competition.name]
         else:
             results2 += [{'x': "{:%Y/%m/%d}".format(r.race.date),
-                          'y': r.time//1000}]
+                          'y': r.time // 1000}]
             races2 += [r.race.course.competition.name]
 
     trainings = db.session.query(TrainingParticipant.member_id, Training.date).\
@@ -106,18 +107,19 @@ def member_individual(member_id):
             y = []
             for year in group:
                 y.append(year['month'])
-            x.append({'year': key, name+'_sum': len(y), name+'_first_half': len(
-                [i for i in y if i < 10]), name+'_second_half': len([i for i in y if i >= 10])})
+            x.append({'year': key, name + '_sum': len(y), name + '_first_half': len(
+                [i for i in y if i < 10]), name + '_second_half': len([i for i in y if i >= 10])})
 
         return x
 
     participations = []
-    for key, group in groupby(sorted(summary(trainings, "trainings") + summary(afters, "afters") + summary(afterdays, "afterdays"), key=lambda x: x['year']), key=lambda x: x['year']):
+    for key, group in groupby(sorted(summary(trainings, "trainings") + summary(afters, "afters") +
+                                     summary(afterdays, "afterdays"), key=lambda x: x['year']), key=lambda x: x['year']):
         y = []
         for year in group:
             y.append(year)
-        for i in range(len(y)-1):
-            y[0].update(y[i+1])
+        for i in range(len(y) - 1):
+            y[0].update(y[i + 1])
         participations.append(y[0])
 
     restaurants = db.session.query(AfterParticipant.member_id, Restaurant.name, Restaurant.id, func.count(After.id).label('cnt')).\
@@ -126,7 +128,8 @@ def member_individual(member_id):
         join(Restaurant, Restaurant.id == After.restaurant_id).\
         group_by(Restaurant.id).order_by(db.text('cnt DESC')).all()
 
-    return render_template('member_individual.html', member=m, results1=str(results1), results2=str(results2), races1=str(races1), races2=str(races2), first_training=first_training, first_after=first_after, count_trainings=count_trainings, count_afters=count_afters, count_afterdays=count_afterdays, participations=participations, restaurants=restaurants)
+    return render_template('member_individual.html', member=m, results1=str(results1), results2=str(results2), races1=str(races1), races2=str(races2), first_training=first_training,
+                           first_after=first_after, count_trainings=count_trainings, count_afters=count_afters, count_afterdays=count_afterdays, participations=participations, restaurants=restaurants)
 
 
 @app.route('/member/edit', methods=['GET', 'POST'])
@@ -530,7 +533,8 @@ def course_edit():
         "competition_id", default=-1, type=int) or request.form.get('competition_id')
 
     if competition_id == -1:
-        return render_template('template_message.html', message='大会指定が無効です<br>先に大会を作成してください')
+        return render_template('template_message.html',
+                               message='大会指定が無効です<br>先に大会を作成してください')
 
     competition = Competition.query.get(competition_id)
     form.competition_id.data = competition.id
@@ -545,7 +549,8 @@ def course_edit():
         form.method.data = 'PUT'
     else:
         form.method.data = 'POST'
-    return render_template('course_edit.html', form=form, competition=competition)
+    return render_template('course_edit.html', form=form,
+                           competition=competition)
 
 
 @app.route('/course/confirm', methods=["POST"])
@@ -579,7 +584,8 @@ def course_confirm():
             course = Course.query.get(form.id.data)
             form = CourseForm(obj=course)
         competition = Competition.query.get(form.competition_id.data)
-        return render_template('course_confirm.html', form=form, competition=competition)
+        return render_template('course_confirm.html',
+                               form=form, competition=competition)
 
 
 @app.route('/race/')
@@ -691,14 +697,16 @@ def result_edit():
     if form.method.data == "POST":
         # コース未指定時はコース選択へjump
         if form.course_id.data is None:
-            return render_template('result_edit_course.html', form=form, competition=competition)
+            return render_template(
+                'result_edit_course.html', form=form, competition=competition)
         else:
             course = Course.query.get(form.course_id.data)
 
         # レース(日付)未指定時は
         if form.date.data is None:
             if form.race_id.data is None:
-                return render_template('result_edit_race.html', form=form, competition=competition, course=course)
+                return render_template(
+                    'result_edit_race.html', form=form, competition=competition, course=course)
             else:
                 race = Race.query.get(form.race_id.data)
                 form.date.data = race.date
@@ -725,7 +733,8 @@ def result_edit():
 #         app.logger.info("participants of results")
 #         app.logger.info(form.participants)
 
-    return render_template('result_edit.html', form=form, competition=competition, course=course)
+    return render_template('result_edit.html', form=form,
+                           competition=competition, course=course)
 
 
 @app.route('/result/confirm', methods=['POST'])
@@ -811,7 +820,8 @@ def result_confirm():
         app.logger.info(form.submit.data)
         app.logger.info(request.form.get("submit"))
         if request.form.get("submitValue") == "登録して、同じ大会の記録を追加":
-            return redirect(url_for('result_edit', restart="race", race_id=result.race_id))
+            return redirect(
+                url_for('result_edit', restart="race", race_id=result.race_id))
         else:
             return redirect(url_for('result'))
     else:  # show confirm view when not confirmed
@@ -833,7 +843,8 @@ def result_confirm():
         course = Course.query.get(form.course_id.data)
         form.participants = [Member.query.get(mid)
                              for mid in form.participants.data]
-        return render_template('result_confirm.html', form=form, competition=competition, course=course)
+        return render_template(
+            'result_confirm.html', form=form, competition=competition, course=course)
 
 
 @ app.route('/ranking')
@@ -856,7 +867,8 @@ def ranking():
                  ]
     year_list = map(lambda x: int(x), year_list)
 
-    return render_template('ranking.html', items=items, begin=begin, end=end, year_list=year_list, years=range(current_school_year, 1990, -1))
+    return render_template('ranking.html', items=items, begin=begin, end=end,
+                           year_list=year_list, years=range(current_school_year, 1990, -1))
 
 
 @ app.route('/search/')
@@ -874,7 +886,8 @@ def restaurant():
     page = max([1, int(page)])
     restaurants = Restaurant.query.order_by(
         Restaurant.score.desc()).paginate(page, per_page)
-    return render_template('restaurant.html', pagination=restaurants, afters=afters)
+    return render_template(
+        'restaurant.html', pagination=restaurants, afters=afters)
 
 
 @ app.route('/restaurant/edit', methods=['GET', 'POST'])
@@ -948,4 +961,5 @@ def restaurant_confirm():
 
 @app.errorhandler(404)
 def page_not_found(error):
-    return render_template('template_message.html', message='指定されたページは存在しません'), 404
+    return render_template('template_message.html',
+                           message='指定されたページは存在しません'), 404
